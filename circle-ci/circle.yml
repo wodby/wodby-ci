@@ -1,0 +1,25 @@
+machine:
+  pre:
+    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
+  services:
+    - docker
+dependencies:
+  override:
+    - sudo pip install docker-compose
+    - docker-compose up -d
+test:
+  override:
+    - docker-compose run php mkdir vendor
+    - docker-compose run php touch composer.lock
+    - docker-compose run php chown -R 82:82 vendor
+    - docker-compose run php chown 82:82 composer.json
+    - docker-compose run php chown 82:82 composer.lock
+    - docker-compose run php chown -R 82:82 sites
+    - docker-compose run --user 82 php sh scripts/tests.sh
+deployment:
+  production:
+    branch: /.*/
+    commands:
+      - tar -c --exclude='.git' --exclude='.gitignore' --exclude="./docker-runtime" . | gzip -9 | aws s3 cp - "s3://$AWS_S3_BUCKET/$AWS_S3_FILE_NAME-$CIRCLE_BUILD_NUM.tar.gz"
+      - (cd ./scripts; composer update --no-interaction)
+      - php -f ./scripts/wodby.php
