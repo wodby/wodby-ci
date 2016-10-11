@@ -9,7 +9,6 @@ $api = new Wodby\Api($_SERVER['WODBY_API_TOKEN'], new GuzzleHttp\Client());
 /******************************************************************************
  * Create new application instance.
  */
-
 echo "Deploying new instance via Wodby...", PHP_EOL;
 
 $result = $api->instance()->create(
@@ -51,7 +50,6 @@ $api->task()->wait($task->getId(), 600);
 /******************************************************************************
  * Update application instance build info.
  */
-
 echo "Updating build info...", PHP_EOL;
 
 $api->instance()->updateProperty(
