@@ -5,7 +5,7 @@ set -eo pipefail
 WORKING_DIR="$WORKSPACE/scripts"
 
 ######################################################################
-#  Archive as tarball and upload to AWS S3
+#  Archive as tarball and upload to AWS S3.
 ######################################################################
 echo "Archiving as tarball and uploading to AWS S3..."
 
@@ -30,6 +30,6 @@ php -f "$WORKING_DIR/deploy-new-instance.php"
 echo "New application instance created."
 
 ######################################################################
-#  Cleanup
+#  Cleanup.
 ######################################################################
 rm -rf "$WORKING_DIR/vendor" "$WORKING_DIR/composer.lock"
