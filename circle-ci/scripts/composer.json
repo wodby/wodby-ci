@@ -1,5 +1,5 @@
 {
   "require": {
-    "wodby/wodby-sdk-php": "dev-master"
+    "wodby/wodby-sdk-php": "^0.1.4"
   }
 }
