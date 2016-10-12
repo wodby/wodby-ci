@@ -14,6 +14,8 @@ services:
     environment:
       PHP_SITE_NAME: dev
       PHP_HOST_NAME: localhost:8000
+      SIMPLETEST_BASE_URL: http://nginx
+      SIMPLETEST_DB: mysql://drupal:drupal@mariadb/drupal
     volumes:
       - ./:/var/www/html
 
