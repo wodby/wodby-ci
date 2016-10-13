@@ -7,8 +7,7 @@ set -eo pipefail
 ######################################################################
 echo "Archiving as tarball and uploading to AWS S3..."
 
-tar -C "./scripts" \
-	-c \
+tar -c \
     --exclude='.git' \
     . | gzip | aws s3 cp - "s3://$AWS_S3_BUCKET/$AWS_S3_FILE_NAME-$BUILD_NUMBER.tar.gz"
 
