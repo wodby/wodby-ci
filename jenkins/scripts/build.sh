@@ -3,7 +3,13 @@
 set -eo pipefail
 
 # Install merge plugin.
-composer update --no-interaction
+docker run --rm \
+    -v "$HOME/.composer":/composer \
+    -v "$PWD":/app \
+    composer/composer:alpine update -n
 
 # Install all requirements.
-composer update --no-interaction
+docker run --rm \
+    -v "$HOME/.composer":/composer \
+    -v "$PWD":/app \
+    composer/composer:alpine update -n

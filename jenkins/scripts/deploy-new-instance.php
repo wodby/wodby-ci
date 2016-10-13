@@ -9,18 +9,19 @@ $api = new Wodby\Api($_SERVER['WODBY_API_TOKEN'], new GuzzleHttp\Client());
 /******************************************************************************
  * Create new application instance.
  */
+
 echo "Deploying new instance via Wodby...", PHP_EOL;
 
 $result = $api->instance()->create(
-  getenv('MY_APP_ID'),
+  getenv('WODBY_APP_ID'),
   'jenkins-' . getenv('BUILD_NUMBER'),
   Entity\Instance::TYPE_DEV,
-  getenv('MY_SERVER_ID'),
+  getenv('WODBY_SERVER_ID'),
   [
-    Entity\Instance::COMPONENT_DATABASE => getenv('MY_APP_SOURCE_INSTANCE_ID'),
-    Entity\Instance::COMPONENT_FILES => getenv('MY_APP_SOURCE_INSTANCE_ID'),
+    Entity\Instance::COMPONENT_DATABASE => getenv('WODBY_SOURCE_INSTANCE_ID'),
+    Entity\Instance::COMPONENT_FILES => getenv('WODBY_SOURCE_INSTANCE_ID'),
   ],
-  "[Jenkins] Build #{$_SERVER['BUILD_NUMBER']}"
+  '[Jenkins] Build #' . getenv('BUILD_NUMBER')
 );
 
 /** @var Entity\Task $task */
@@ -50,6 +51,7 @@ $api->task()->wait($task->getId(), 600);
 /******************************************************************************
  * Update application instance build info.
  */
+
 echo "Updating build info...", PHP_EOL;
 
 $api->instance()->updateProperty(
