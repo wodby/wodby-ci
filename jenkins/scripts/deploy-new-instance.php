@@ -4,7 +4,7 @@ use \Wodby\Api\Entity;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$api = new Wodby\Api($_SERVER['WODBY_API_TOKEN'], new GuzzleHttp\Client());
+$api = new Wodby\Api(getenv('WODBY_API_TOKEN'), new GuzzleHttp\Client());
 
 /******************************************************************************
  * Create new application instance.
