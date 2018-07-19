@@ -1,0 +1,30 @@
+# The following example
+# 1. Installs your dependencies from composer.json
+# 2. Builds and pushes default images with contents of the current directory (./)
+# 3. Deploys build to your app instance
+
+version: 2
+
+jobs:
+  build:
+    machine: true
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - composer-v1-{{ checksum "composer.lock" }}
+            - composer-v1-
+
+      - run: wodby ci init $WODBY_INSTANCE_UUID
+      - run: wodby ci run -v $HOME/.composer:$HOME/.composer -s php -- composer install --prefer-dist -n --no-dev
+
+      - save_cache:
+          key: composer-v1-{{ checksum "composer.lock" }}
+          paths:
+            - ~/.composer/cache
+
+      - run: wodby ci build --from ./
+      - run: wodby ci release
+      - run: wodby ci deploy

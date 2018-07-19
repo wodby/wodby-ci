@@ -1,0 +1,33 @@
+# The following example
+# 1. Installs your dependencies from package.json
+# 2. Runs build
+# 3. Builds and pushes a docker image (HTTP server) with contents of the build (./build)
+# 4. Deploys this image to your HTML app instance
+
+version: 2
+
+jobs:
+  build:
+    machine: true
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - yarn-v1-{{ checksum "yarn.lock" }}
+            - yarn-v1-
+
+      - run: wget -qO- https://api.wodby.com/api/v1/get/cli | sh
+      - run: wodby ci init $WODBY_INSTANCE_UUID
+      - run: wodby ci run -i wodby/node:8 -- yarn install
+
+      - save_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+
+      - run: wodby ci run -i wodby/node:8 -- yarn run build
+      - run: wodby ci build --from ./build
+      - run: wodby ci release
+      - run: wodby ci deploy

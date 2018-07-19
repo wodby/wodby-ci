@@ -1,0 +1,24 @@
+# The following example
+# 1. Installs your dependencies from package.json
+# 2. Runs build
+# 3. Builds and pushes a docker image (HTTP server) with contents of the build (./build)
+# 4. Deploys this image to your HTML app instance
+
+image: wodby/wodby-cli
+
+options:
+  docker: true
+
+pipelines:
+  default:
+    - step:
+        caches:
+          - docker
+          - node
+        script:
+          - wodby ci init $WODBY_INSTANCE_UUID
+          - wodby ci run -i wodby/node:8 -- yarn install
+          - wodby ci run -i wodby/node:8 -- yarn run build
+          - wodby ci build --from ./build
+          - wodby ci release
+          - wodby ci deploy
