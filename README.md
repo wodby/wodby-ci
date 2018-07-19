@@ -5,9 +5,9 @@
 ### Managed HTML stack
 
 The following example
-1. Installs your dependencies from package.json
+1. Installs your dependencies from `package.json`
 2. Runs build
-3. Builds and pushes a docker image (HTTP server) with contents of the build (./build)
+3. Builds and pushes a docker image (HTTP server) with contents of `./build`
 4. Deploys this image to your HTML app instance
 
 Examples:
@@ -20,8 +20,8 @@ Examples:
 ### Managed PHP-based stack
 
 The following example
-1. Installs your dependencies from composer.json
-2. Builds and pushes default images with contents of the current directory (./)
+1. Installs your dependencies from `composer.json`
+2. Builds and pushes default images with contents of the current directory `./`
 3. Deploys build to your app instance
 
 Examples:
