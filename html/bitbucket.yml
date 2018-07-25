@@ -13,12 +13,15 @@ pipelines:
   default:
     - step:
         caches:
-          - docker
-          - node
+          - yarn
         script:
           - wodby ci init $WODBY_INSTANCE_UUID
-          - wodby ci run -i wodby/node:8 -- yarn install
+          - wodby ci run -i wodby/node:8 -v $HOME/.cache/yarn:$HOME/.cache/yarn -- yarn install
           - wodby ci run -i wodby/node:8 -- yarn run build
           - wodby ci build --from ./build
           - wodby ci release
           - wodby ci deploy
+
+definitions:
+  caches:
+    yarn: ~/.cache/yarn

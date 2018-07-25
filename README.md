@@ -2,7 +2,7 @@
 
 ## Third-party CI
 
-### Build node application (managed HTML stack)
+### Build node application via yarn (managed HTML stack)
 
 The following example
 1. Installs your dependencies from `package.json`

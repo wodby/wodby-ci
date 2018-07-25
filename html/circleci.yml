@@ -20,12 +20,12 @@ jobs:
 
       - run: wget -qO- https://api.wodby.com/api/v1/get/cli | sh
       - run: wodby ci init $WODBY_INSTANCE_UUID
-      - run: wodby ci run -i wodby/node:8 -- yarn install
+      - run: wodby ci run -v $HOME/.cache/yarn:$HOME/.cache/yarn -i wodby/node:8 -- yarn install
 
       - save_cache:
           key: yarn-v1-{{ checksum "yarn.lock" }}
           paths:
-            - node_modules
+            - ~/.cache/yarn/
 
       - run: wodby ci run -i wodby/node:8 -- yarn run build
       - run: wodby ci build --from ./build
