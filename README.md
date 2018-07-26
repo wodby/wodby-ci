@@ -1,12 +1,14 @@
-# Examples to help you set up CI/CD workflow on Wodby 
+# Examples 
 
-Full documentation on CI/CD workflow available at https://docs.wodby.com/apps/deploy/#cicd
+The following examples ought to help you set up CI/CD workflow on Wodby.
+
+See full documentation on CI/CD workflow at https://docs.wodby.com/apps/deploy/#cicd
 
 ## Third-party CI
 
-### Build node application via yarn (managed HTML stack)
+### Static HTML with node
 
-The following example
+The following example is for managed HTML stack:
 1. Installs your dependencies from `package.json`
 2. Runs build
 3. Builds and pushes a docker image (HTTP server) with contents of `./build`
@@ -19,9 +21,9 @@ Example files:
 * BitBucket pipelines: [`bitbucket-pipelines.yml`](html/bitbucket.yml)
 * Custom shell script: [`custom.sh`](html/custom.sh)
 
-### Build composer-based application (managed PHP-based stack)
+### Composer-based PHP app
 
-The following example
+The following example is for managed PHP-based stacks (Drupal, WordPress, Generic PHP):
 1. Installs your dependencies from `composer.json`
 2. Builds and pushes default images with contents of the current directory `./`
 3. Deploys build to your app instance
