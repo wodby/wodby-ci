@@ -1,5 +1,7 @@
 # Examples to help you set up CI/CD workflow on Wodby 
 
+Full documentation on CI/CD workflow available at https://docs.wodby.com/apps/deploy/#cicd
+
 ## Third-party CI
 
 ### Build node application via yarn (managed HTML stack)
