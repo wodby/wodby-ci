@@ -2,7 +2,7 @@
 
 The following examples ought to help you set up CI/CD workflow on Wodby.
 
-See full documentation on CI/CD workflow at https://docs.wodby.com/apps/deploy/#cicd
+See full documentation on CI/CD workflow at https://wodby.com/docs/apps/deploy/#cicd
 
 ## Third-party CI
 
