@@ -15,7 +15,7 @@ pipelines:
           - docker
         script:
           - wodby ci init --dind $WODBY_INSTANCE_UUID
-          # no ~/.npm/_cacache due to bind mounts limitations on bitbucket.
+          # no ~/.composer/cache bind mount due to bitbucket limitations.
           - wodby ci run -- composer install -vvv --prefer-dist -n --no-dev
           - wodby ci build --from ./
           - wodby ci release
