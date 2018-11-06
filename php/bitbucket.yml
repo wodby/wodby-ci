@@ -13,10 +13,16 @@ pipelines:
     - step:
         caches:
           - docker
-          - composer
         script:
-          - wodby ci init $WODBY_INSTANCE_UUID
-          - wodby ci run -v $HOME/.composer:$HOME/.composer -- composer install --prefer-dist -n --no-dev
+          - wodby ci init --dind $WODBY_INSTANCE_UUID
+          # no ~/.npm/_cacache due to bind mounts limitations on bitbucket.
+          - wodby ci run -- composer install -vvv --prefer-dist -n --no-dev
           - wodby ci build --from ./
           - wodby ci release
           - wodby ci deploy
+        services:
+          - docker
+definitions:
+  services:
+    docker:
+      memory: 2048
