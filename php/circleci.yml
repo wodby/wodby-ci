@@ -19,7 +19,7 @@ jobs:
 
       - run: wget -qO- https://api.wodby.com/api/v1/get/cli | sh
       - run: wodby ci init $WODBY_INSTANCE_UUID
-      - run: wodby ci run -v $HOME/.composer:$HOME/.composer -s php -- composer install --prefer-dist -n --no-dev
+      - run: wodby ci run -v $HOME/.composer:/home/wodby/.composer -s php -- composer install -n
 
       - save_cache:
           key: composer-v1-{{ checksum "composer.lock" }}
