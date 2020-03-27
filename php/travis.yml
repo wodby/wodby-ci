@@ -7,7 +7,7 @@ language: bash
 
 cache:
     directories:
-     - /home/travis/.composer/cache
+     - /home/travis/.composer
 
 sudo: required
 
