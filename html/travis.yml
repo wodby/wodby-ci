@@ -8,7 +8,7 @@ language: bash
 
 cache:
     directories:
-    - /home/travis/.cache/yarn
+    - /home/travis/.cache
 
 sudo: required
 
@@ -19,8 +19,8 @@ script:
   - set -e
   - wget -qO- https://api.wodby.com/api/v1/get/cli | sh
   - wodby ci init $WODBY_INSTANCE_UUID
-  - wodby ci run -i wodby/node:8 -v $HOME/.cache/yarn:$HOME/.cache/yarn -- yarn install
-  - wodby ci run -i wodby/node:8 -- yarn run build
+  - wodby ci run -i wodby/node -v $HOME/.cache:/home/node/.cache -- yarn install
+  - wodby ci run -i wodby/node -- yarn run build
   - wodby ci build --from ./build
   - wodby ci release
   - wodby ci deploy
