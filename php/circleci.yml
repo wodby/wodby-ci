@@ -21,24 +21,25 @@ jobs:
       - run: wodby ci init $WODBY_INSTANCE_UUID
       - run:
           name: Fix .composer permissions
-          command: |
-            if [[ ! -d $HOME/.composer ]]; then
-              wodby ci run -v $HOME/.composer:/home/wodby/.composer --user root -- chown -R 1000:1000 /home/wodby/.composer
-            fi
+          command: wodby ci run -v $HOME/.composer:/home/wodby/.composer --user root -- chown -R 1000:1000 /home/wodby/.composer
 
-      - run: wodby ci run -v $HOME/.composer:/home/wodby/.composer -s php -- composer install -n
+      - run: 
+          name: Install composer dependencies
+          command: wodby ci run -v $HOME/.composer:/home/wodby/.composer -s php -- composer install -n
 
 ## When you need to use a checkout key for private repositories:
-#     - run: wodby ci run \
-#        -v /home/circleci/.ssh/known_hosts:/home/wodby/.ssh/known_hosts \
-#        -v /home/circleci/.ssh/id_rsa_[your-checkout-key-fingerprint]:/home/wodby/.ssh/id_rsa \
-#        -v $HOME/.composer:/home/wodby/.composer \
-#        -s php -- composer install -n
+#       - run: 
+#           name: Install composer dependencies with private packages
+#           command: wodby ci run \
+#             -v /home/circleci/.ssh/known_hosts:/home/wodby/.ssh/known_hosts \
+#             -v /home/circleci/.ssh/id_rsa_[your-checkout-key-fingerprint]:/home/wodby/.ssh/id_rsa \
+#             -v $HOME/.composer:/home/wodby/.composer \
+#             -s php -- composer install -n
 
       - save_cache:
           key: composer-v1-{{ checksum "composer.lock" }}
           paths:
-            - ~/.composer/cache
+            - ~/.composer
 
       - run: wodby ci build --from ./
       - run: wodby ci release
