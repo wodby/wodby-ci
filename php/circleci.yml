@@ -28,6 +28,13 @@ jobs:
 
       - run: wodby ci run -v $HOME/.composer:/home/wodby/.composer -s php -- composer install -n
 
+## When you need to use a checkout key for private repositories:
+#     - run: wodby ci run \
+#        -v /home/circleci/.ssh/known_hosts:/home/wodby/.ssh/known_hosts \
+#        -v /home/circleci/.ssh/id_rsa_[your-checkout-key-fingerprint]:/home/wodby/.ssh/id_rsa \
+#        -v $HOME/.composer:/home/wodby/.composer \
+#        -s php -- composer install -n
+
       - save_cache:
           key: composer-v1-{{ checksum "composer.lock" }}
           paths:
