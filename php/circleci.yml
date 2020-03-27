@@ -19,6 +19,13 @@ jobs:
 
       - run: wget -qO- https://api.wodby.com/api/v1/get/cli | sh
       - run: wodby ci init $WODBY_INSTANCE_UUID
+      - run:
+          name: Fix .composer permissions
+          command: |
+            if [[ ! -d $HOME/.composer ]]; then
+              wodby ci run -v $HOME/.composer:/home/wodby/.composer --user root -- chown -R 1000:1000 /home/wodby/.composer
+            fi
+
       - run: wodby ci run -v $HOME/.composer:/home/wodby/.composer -s php -- composer install -n
 
       - save_cache:
