@@ -17,6 +17,11 @@ pipelines:
           - wodby ci init --dind $WODBY_INSTANCE_UUID
           # no ~/.composer/cache bind mount due to bitbucket limitations.
           - wodby ci run -- composer install --prefer-dist -n --no-dev
+          # if you're installing node dependencies for managed (php-based) stacks 
+          # make sure you're specifying the path (-p) correctly because the codebase will be mounted to /var/www/html (main service php workdir)
+          # but node's image work dir is /usr/src/app
+          # this happens only in docker-in-docker (--dind) case when we use --volumes-from to mounte codebase.
+          #- wodby ci run -i wodby/node:12 -p ../../../var/www/html/path/to/packages.json -- npm install
           - wodby ci build --from ./
           - wodby ci release
           - wodby ci deploy
