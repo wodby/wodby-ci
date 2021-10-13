@@ -8,7 +8,9 @@ version: 2
 
 jobs:
   build:
-    machine: true
+    machine: 
+      # Manually specify newer image because the default one has expired root certificates.
+      image: circleci/classic:201808-01
 
     steps:
       - checkout
