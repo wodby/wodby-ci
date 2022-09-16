@@ -16,6 +16,7 @@ The following example is for managed HTML stack:
 
 Example files:
 
+* GitHub Actions: [`.github/workflows/workflow.yml`](html/github.yml)
 * CircleCI: [`.circleci/config.yml`](html/circleci.yml)
 * TravisCI: [`.travis.yml`](html/travis.yml)
 * BitBucket pipelines: [`bitbucket-pipelines.yml`](html/bitbucket.yml)
@@ -30,6 +31,7 @@ The following example is for managed PHP-based stacks (Drupal, WordPress, Generi
 
 Example files:
 
+* GitHub Actions: [`.github/workflows/workflow.yml`](php/github.yml)
 * CircleCI: [`.circleci/config.yml`](php/circleci.yml)
 * TravisCI: [`.travis.yml`](php/travis.yml)
 * BitBucket pipelines: [`bitbucket-pipelines.yml`](php/bitbucket.yml)
