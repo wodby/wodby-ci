@@ -16,7 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: php-actions/composer@v6
     
     - name: Get Wodby CLI
       run: wget -qO- https://api.wodby.com/api/v1/get/cli | sh
