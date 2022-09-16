@@ -37,6 +37,3 @@ Example files:
 * BitBucket pipelines: [`bitbucket-pipelines.yml`](php/bitbucket.yml)
 * Custom shell script: [`custom.sh`](php/custom.sh)
 
-## Wodby CI 
-
-Coming soon...
