@@ -1,0 +1,43 @@
+name: Build and deploy static html app on Wodby
+
+on:
+  push:
+    branches:
+    - 'main'
+
+  pull_request:
+
+env:
+  WODBY_INSTANCE_UUID: your-uuid
+  WODBY_API_KEY: ${{ secrets.WODBY_API_KEY }}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+        cache: 'npm'
+    
+    - name: Get Wodby CLI
+      run: wget -qO- https://api.wodby.com/api/v1/get/cli | sh
+
+    - name: Initialize build config for app instance
+      run: wodby ci init $WODBY_INSTANCE_UUID
+
+    - name: Install node dependencies
+      run: npm i
+
+    - name: Build application
+      run: npm run build
+
+    - name: Build images
+      run: wodby ci build --from ./build
+
+    - name: Release images
+      run: wodby ci release
+
+    - name: Deploy app instance
+      run: wodby ci deploy
