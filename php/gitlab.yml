@@ -16,9 +16,10 @@ prod_deploy:
   script:
   - wodby ci init --dind $WODBY_INSTANCE_UUID
   - wodby ci run -- composer install --prefer-dist -n --no-dev
-  - wodby ci build nginx --from ./
-  - wodby ci build php --from ./ --dockerfile Dockerfile
-  - wodby ci build crond --from ./ --dockerfile Dockerfile
-  - wodby ci build sshd --from ./ --dockerfile Dockerfile
+  - wodby ci build
+#  - wodby ci build nginx --from ./
+#  - wodby ci build php --from ./ --dockerfile Dockerfile
+#  - wodby ci build crond --from ./ --dockerfile Dockerfile
+#  - wodby ci build sshd --from ./ --dockerfile Dockerfile
   - wodby ci release
   - wodby ci deploy
