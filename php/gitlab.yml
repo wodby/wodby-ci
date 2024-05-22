@@ -1,0 +1,24 @@
+image: wodby/wodby-cli
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
+services:
+- name: docker:24.0-dind
+  alias: docker
+
+stages:
+- deploy
+
+prod_deploy:
+  stage: deploy
+  script:
+  - wodby ci init --dind $WODBY_INSTANCE_UUID
+  - wodby ci run -- composer install --prefer-dist -n --no-dev
+  - wodby ci build nginx --from ./
+  - wodby ci build php --from ./ --dockerfile Dockerfile
+  - wodby ci build crond --from ./ --dockerfile Dockerfile
+  - wodby ci build sshd --from ./ --dockerfile Dockerfile
+  - wodby ci release
+  - wodby ci deploy
