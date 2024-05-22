@@ -34,6 +34,7 @@ Example files:
 * GitHub Actions: [`.github/workflows/workflow.yml`](php/github.yml)
 * CircleCI: [`.circleci/config.yml`](php/circleci.yml)
 * TravisCI: [`.travis.yml`](php/travis.yml)
+* GitLab CI: [`.gitlab-ci.yml`](php/gitlab.yml)
 * BitBucket pipelines: [`bitbucket-pipelines.yml`](php/bitbucket.yml)
 * Custom shell script: [`custom.sh`](php/custom.sh)
 
