@@ -6,6 +6,19 @@ See full documentation on CI/CD workflow at https://wodby.com/docs/apps/deploy/#
 
 ## Third-party CI
 
+### Next.js app
+
+The following example is for custom Next.js stack:
+1. Installs your dependencies from `package.json`
+2. Builds and pushes default images with contents of the current directory `./`
+3. Deploys build to your app instance
+
+Example files:
+
+* GitHub Actions: [`.github/workflows/workflow.yml`](nextjs/github.yml)
+* Stack template: [`stack.yml`](nextjs/stack.yml) to create custom stack
+* Dockerfile to build nextjs app: [`Dockerfile`](nextjs/Dockerfile), put in your git repository root
+
 ### Static HTML with node
 
 The following example is for managed HTML stack:

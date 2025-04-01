@@ -1,0 +1,8 @@
+services:
+  node:
+    image: 'wodby/node:22'
+    image_pull: IfNotPresent
+    deployment:
+      type: ci
+    ports:
+      - 'edge::3000'
