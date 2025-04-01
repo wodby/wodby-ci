@@ -1,0 +1,12 @@
+version: 0.1
+
+env:
+  FOO: bar
+
+jobs:
+  post-deployment:
+    env:
+      FOO: bar2
+    steps:
+      - run: |
+          echo "this script runs after deployment completed: ${FOO}"
