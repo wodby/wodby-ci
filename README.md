@@ -43,6 +43,7 @@ Put the following files inside `.wodby` directory of your git repository that yo
 You can also find boilerplate for build templates for the following stacks: 
 
 - [Drupal Vanilla](https://github.com/wodby/drupal-vanilla)
+- [Drupal CMS](https://github.com/wodby/drupal-cms-template)
 - [WordPress Vanilla](https://github.com/wodby/wordpress-vanilla)
 - [Next.js](https://github.com/wodby/nextjs-boilerplate)
 - [Node.js (Express.js)](https://github.com/wodby/expressjs-boilerplate)
