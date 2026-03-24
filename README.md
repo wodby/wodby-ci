@@ -44,8 +44,9 @@ You can also find boilerplate for build templates for the following stacks:
 
 - [Drupal Vanilla](https://github.com/wodby/drupal-vanilla)
 - [WordPress Vanilla](https://github.com/wodby/wordpress-vanilla)
-- [NextJS](https://github.com/wodby/nextjs)
-- [Matomo](https://github.com/wodby/service-matomo/blob/main/pipeline.yml)
+- [Next.js](https://github.com/wodby/nextjs-boilerplate)
+- [Node.js (Express.js)](https://github.com/wodby/expressjs-boilerplate)
+- [React](https://github.com/wodby/react-boilerplate)
 
 ## Third-party CI
 
