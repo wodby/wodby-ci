@@ -24,9 +24,11 @@ Available providers:
   put these files inside the `.wodby` directory of your git repository:
   [`.wodby/pipeline.yml`](php/wodby/pipeline.yml),
   [`.wodby/post-deployment.yml`](php/wodby/post-deployment.yml) (optional)
+* GitHub Actions:
+  put [`.github/workflows/wodby.yml`](php/github-actions/wodby.yml) in the root of your git repository and configure `WODBY_API_KEY` and `WODBY_APP_SERVICE_ID` repository secrets.
 * GitLab CI:
   uses the docker-in-docker method.
-  Put [`.gitlab-ci.yml`](php/gitlab/.gitlab-ci.yml) in the root of your git repository.
+  Put [`.gitlab-ci.yml`](php/gitlab-ci/.gitlab-ci.yml) in the root of your git repository.
 * CircleCI:
   put [`.circleci/config.yml`](php/circleci/config.yml) in the root of your git repository.
 
@@ -36,7 +38,7 @@ The following examples are for a simple Node stack:
 
 1. Installs your node dependencies from `package.json`
 2. Builds docker images for node service with contents of the current directory `./`
-3. Caches contents of `node_modules` directory and restores during the next build based on `package-lock.json` checksum
+3. Caches contents of `~/.npm` directory and restores during the next build based on `package-lock.json` checksum
 4. Pushes images to associated docker registry (Wodby registry by default)
 5. Triggers deployment of the new build to your app instance
 
@@ -46,9 +48,11 @@ Available providers:
   put these files inside the `.wodby` directory of your git repository:
   [`.wodby/pipeline.yml`](node/wodby/pipeline.yml),
   [`.wodby/post-deployment.yml`](node/wodby/post-deployment.yml) (optional)
+* GitHub Actions:
+  put [`.github/workflows/wodby.yml`](node/github-actions/wodby.yml) in the root of your git repository and configure `WODBY_API_KEY` and `WODBY_APP_SERVICE_ID` repository secrets.
 * GitLab CI:
   uses the docker-in-docker method.
-  Put [`.gitlab-ci.yml`](node/gitlab/.gitlab-ci.yml) in the root of your git repository.
+  Put [`.gitlab-ci.yml`](node/gitlab-ci/.gitlab-ci.yml) in the root of your git repository.
 * CircleCI:
   put [`.circleci/config.yml`](node/circleci/config.yml) in the root of your git repository.
 
@@ -66,6 +70,8 @@ You can also find boilerplate for build templates for the following stacks:
 ## Third-party CI
 
 You can use Wodby 2.0 with third-party CI services like GitHub Actions, GitLab CI, CircleCI, etc. by using Wodby CLI.
+
+The GitHub Actions examples in this repository use [`wodby/actions/setup-wodby-cli`](https://github.com/wodby/actions/tree/main/setup-wodby-cli) on GitHub-hosted Ubuntu runners.
 
 You can also use any custom CI provider in a similar way with [Wodby CLI](https://github.com/wodby/wodby-cli).
 

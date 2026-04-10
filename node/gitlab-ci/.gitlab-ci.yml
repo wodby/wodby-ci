@@ -5,7 +5,7 @@ image:
   pull_policy: always
 
 variables:
-  WODBY_APP_SERVICE_ID: PAST-APP_SERVICE_ID-HERE
+  WODBY_APP_SERVICE_ID: PASTE-APP_SERVICE_ID-HERE
 
 services:
   - name: docker:dind

@@ -1,0 +1,45 @@
+name: Wodby Node Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-v1-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            npm-v1-${{ runner.os }}-
+
+      - uses: wodby/actions/setup-wodby-cli@v1
+        with:
+          api-key: ${{ secrets.WODBY_API_KEY }}
+          app-service-id: PASTE-APP_SERVICE_ID-HERE
+
+      - name: Install npm dependencies
+        run: wodby ci run -v "$HOME/.npm:/home/wodby/.npm" -- npm ci
+
+      - name: Build images
+        run: wodby ci build
+
+      - name: Release images
+        run: wodby ci release
+
+      - name: Deploy
+        run: wodby ci deploy
+
+      # Skip post deployment scripts execution:
+      # - name: Deploy without post deployment scripts
+      #   run: wodby ci deploy --skip-post-deploy
