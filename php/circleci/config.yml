@@ -1,0 +1,41 @@
+version: 2.1
+
+jobs:
+  build:
+    machine:
+      image: ubuntu-2404:current
+
+    steps:
+      - checkout
+      
+      - restore_cache:
+          keys:
+            - composer-v1-{{ checksum "composer.lock" }}
+            - composer-v1-
+
+      - run: wget -qO- https://api.wodby.com/v1/get/cli | sh
+      - run: wodby ci init $WODBY_APP_SERVICE_ID
+
+      - run:
+          name: Install composer dependencies
+          command: wodby ci run -v $HOME/.composer:/home/wodby/.composer -- composer install -n
+      
+      ## When you need to use a checkout key for private repositories:
+      #       - run: 
+      #           name: Install composer dependencies with private packages
+      #           command: wodby ci run \
+      #             -v /home/circleci/.ssh/known_hosts:/home/wodby/.ssh/known_hosts \
+      #             -v /home/circleci/.ssh/id_rsa_[your-checkout-key-fingerprint]:/home/wodby/.ssh/id_rsa \
+      #             -v $HOME/.composer:/home/wodby/.composer \
+      #             -- composer install -n
+
+      - save_cache:
+          key: composer-v1-{{ checksum "composer.lock" }}
+          paths:
+            - ~/.composer
+
+      - run: wodby ci build
+      - run: wodby ci release
+      - run: wodby ci deploy
+# Skip post deployment scripts execution:        
+#      - run: wodby ci deploy --skip-post-deploy

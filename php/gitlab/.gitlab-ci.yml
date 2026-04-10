@@ -1,0 +1,34 @@
+image:
+  # ATTENTION: GITLAB CI SOMETIMES STILL USES OLD CACHED IMAGE DESPITE THE PULL POLICY ALWAYS.
+  # IN THIS CASE YOU CAN FIND LAST SHA TAG HERE https://hub.docker.com/r/wodby/wodby-cli/tags
+  name: wodby/wodby-cli:2.0
+  pull_policy: always
+
+variables:
+  WODBY_APP_SERVICE_ID: PAST-APP_SERVICE_ID-HERE
+
+services:
+  - name: docker:dind
+    alias: docker
+
+stages:
+  - build_and_deploy
+
+cache:
+  key:
+    files:
+      - composer.lock
+  paths:
+    - vendor/
+    - .composer-cache/
+
+prod_deploy:
+  stage: build_and_deploy
+  script:
+    - wodby ci init --dind $WODBY_APP_SERVICE_ID
+    - wodby ci run -- composer install --prefer-dist -n --no-dev
+    - wodby ci build
+    - wodby ci release
+    - wodby ci deploy
+# optionally skip execution of post deployment scripts  
+#  - wodby ci deploy --skip-post-deploy
