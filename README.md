@@ -60,6 +60,7 @@ Available providers:
 
 You can also find boilerplate for build templates for the following stacks: 
 
+- [PHP](https://github.com/wodby/php-package-boilerplate)
 - [Drupal Vanilla](https://github.com/wodby/drupal-vanilla)
 - [Drupal CMS](https://github.com/wodby/drupal-cms-template)
 - [WordPress Vanilla](https://github.com/wodby/wordpress-vanilla)
