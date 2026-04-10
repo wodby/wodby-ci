@@ -11,16 +11,16 @@ jobs:
       - clone
 
       - cache_restore:
-          path: node_modules
+          path: ~/.npm
           key: 'npm-{{ hash "package-lock.json" }}-v1'
 
       - run: wget -qO- https://api.wodby.com/v1/get/cli | sh
       - run: wodby ci init $WODBY_BUILD_ID
 
-      - run: wodby ci run -s node -- npm ci
+      - run: wodby ci run -v $HOME/.npm:/home/node/.npm -i wodby/node -- npm ci
       - cache_save:
           key: 'npm-{{ hash "package-lock.json" }}-v1'
-          path: node_modules
+          path: ~/.npm
 
       - run: wodby ci build node
       - run: wodby ci release

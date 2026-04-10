@@ -16,7 +16,7 @@ jobs:
 
       - run: wget -qO- https://api.wodby.com/v1/get/cli | sh
       - run: wodby ci init $WODBY_BUILD_ID
-      - run: wodby ci run -v $HOME/.composer:/home/wodby/.composer -s php -- composer require drush/drush
+      - run: wodby ci run -v $HOME/.composer:/home/wodby/.composer -- composer install -n --no-ansi
 
       - cache_save:
           key: 'composer-{{ hash "composer.lock" }}-v1'
