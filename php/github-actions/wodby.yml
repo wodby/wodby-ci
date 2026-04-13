@@ -14,7 +14,14 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+
+      - uses: actions/cache@v5
+        with:
+          path: ~/.composer
+          key: composer-v1-${{ runner.os }}-${{ hashFiles('composer.lock') }}
+          restore-keys: |
+            composer-v1-${{ runner.os }}-
 
       - uses: wodby/actions/setup-wodby-cli@v1
         with:
@@ -22,9 +29,7 @@ jobs:
           app-service-id: PASTE-APP_SERVICE_ID-HERE
 
       - name: Install dependencies
-        uses: php-actions/composer@v6
-        with:
-          php_version: "8.5"
+        run: wodby ci run -v $HOME/.composer:/home/wodby/.composer -- composer install -n --no-ansi
 
       - name: Build images
         run: wodby ci build
