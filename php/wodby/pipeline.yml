@@ -14,7 +14,6 @@ jobs:
           path: ~/.composer
           key: 'composer-{{ hash "composer.lock" }}-v1'
 
-      - run: wget -qO- https://api.wodby.com/v1/get/cli | sh
       - run: wodby ci init $WODBY_BUILD_ID
       - run: wodby ci run -v $HOME/.composer:/home/wodby/.composer -- composer install -n --no-ansi
 

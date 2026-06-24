@@ -6,6 +6,9 @@ For Wodby 1.0 please see [1.0 branch](https://github.com/wodby/wodby-ci/tree/1.0
 
 See full documentation on Wodby CI at https://wodby.com/docs/2.0/cicd/wodby-ci.
 
+Wodby CI installs Wodby CLI before the pipeline steps run, so Wodby CI examples start with
+`wodby ci init $WODBY_BUILD_ID`. Third-party CI providers still need to install Wodby CLI in their own jobs.
+
 ## Examples
 
 ### PHP app
