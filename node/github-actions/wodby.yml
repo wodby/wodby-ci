@@ -29,7 +29,7 @@ jobs:
           app-service-id: ${{ vars.WODBY_APP_SERVICE_ID }}
 
       - name: Install dependencies
-        run: wodby ci run -v $HOME/.npm:/home/node/.npm -- npm ci
+        run: wodby ci run -v "$HOME/.npm:/home/node/.npm" -- npm ci
 
       - name: Build images
         run: wodby ci build

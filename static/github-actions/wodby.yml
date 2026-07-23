@@ -29,10 +29,10 @@ jobs:
           app-service-id: ${{ vars.WODBY_APP_SERVICE_ID }}
 
       - name: Install dependencies
-        run: wodby ci run -v $HOME/.npm:/home/node/.npm -i wodby/node:24 -- npm ci
+        run: wodby ci run -v "$HOME/.npm:/home/node/.npm" -i wodby/node:24 -- npm ci
 
       - name: Build frontend assets
-        run: wodby ci run -v $HOME/.npm:/home/node/.npm -i wodby/node:24 -- npm run build
+        run: wodby ci run -v "$HOME/.npm:/home/node/.npm" -i wodby/node:24 -- npm run build
 
       - name: Build Nginx image
         run: wodby ci build nginx --from dist

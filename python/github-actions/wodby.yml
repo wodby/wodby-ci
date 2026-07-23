@@ -29,7 +29,7 @@ jobs:
           app-service-id: ${{ vars.WODBY_APP_SERVICE_ID }}
 
       - name: Run tests
-        run: wodby ci run -v $HOME/.cache/uv:/home/wodby/.cache/uv -s python -- uv run --frozen pytest
+        run: wodby ci run -v "$HOME/.cache/uv:/home/wodby/.cache/uv" -s python -- uv run --frozen pytest
 
       - name: Build image
         run: wodby ci build python -f Dockerfile

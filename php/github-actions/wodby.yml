@@ -29,7 +29,7 @@ jobs:
           app-service-id: ${{ vars.WODBY_APP_SERVICE_ID }}
 
       - name: Install dependencies
-        run: wodby ci run -v $HOME/.composer:/home/wodby/.composer -- composer install --prefer-dist -n --no-ansi
+        run: wodby ci run -v "$HOME/.composer:/home/wodby/.composer" -- composer install --prefer-dist -n --no-ansi
 
       - name: Build images
         run: wodby ci build
