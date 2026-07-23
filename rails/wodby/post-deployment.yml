@@ -1,0 +1,7 @@
+version: 0.1
+
+jobs:
+  rails-application-check:
+    steps:
+      - run: |
+          bundle exec rails runner 'puts "application loaded"'

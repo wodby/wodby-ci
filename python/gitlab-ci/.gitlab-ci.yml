@@ -1,0 +1,26 @@
+image:
+  name: wodby/wodby-cli:2.0
+  pull_policy: always
+
+services:
+  - name: docker:dind
+    alias: docker
+
+stages:
+  - build_and_deploy
+
+cache:
+  key:
+    files:
+      - uv.lock
+  paths:
+    - .cache/uv/
+
+prod_deploy:
+  stage: build_and_deploy
+  script:
+    - wodby ci init --dind $WODBY_APP_SERVICE_ID
+    - wodby ci run -v $CI_PROJECT_DIR/.cache/uv:/home/wodby/.cache/uv -s python -- uv run --frozen pytest
+    - wodby ci build python -f Dockerfile
+    - wodby ci release
+    - wodby ci deploy

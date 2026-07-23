@@ -1,0 +1,6 @@
+version: 0.1
+
+jobs:
+  wp-cli-info:
+    steps:
+      - run: wp cli info

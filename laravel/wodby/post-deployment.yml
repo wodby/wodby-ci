@@ -1,0 +1,6 @@
+version: 0.1
+
+jobs:
+  laravel-application-check:
+    steps:
+      - run: php artisan about

@@ -1,0 +1,6 @@
+version: 0.1
+
+jobs:
+  django-system-check:
+    steps:
+      - run: python manage.py check

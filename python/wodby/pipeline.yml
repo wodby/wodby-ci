@@ -1,0 +1,26 @@
+version: 0.1
+
+workflows:
+  main:
+    jobs:
+      - build
+
+jobs:
+  build:
+    steps:
+      - clone
+
+      - cache_restore:
+          path: ~/.cache/uv
+          key: 'uv-{{ hash "uv.lock" }}-v1'
+
+      - run: wodby ci init $WODBY_BUILD_ID
+      - run: wodby ci run -v $HOME/.cache/uv:/home/wodby/.cache/uv -s python -- uv run --frozen pytest
+
+      - cache_save:
+          key: 'uv-{{ hash "uv.lock" }}-v1'
+          path: ~/.cache/uv
+
+      - run: wodby ci build python -f Dockerfile
+      - run: wodby ci release
+      - run: wodby ci deploy

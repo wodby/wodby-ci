@@ -15,12 +15,13 @@ jobs:
           key: 'npm-{{ hash "package-lock.json" }}-v1'
 
       - run: wodby ci init $WODBY_BUILD_ID
+      - run: wodby ci run -v $HOME/.npm:/home/node/.npm -i wodby/node:24 -- npm ci
+      - run: wodby ci run -v $HOME/.npm:/home/node/.npm -i wodby/node:24 -- npm run build
 
-      - run: wodby ci run -v $HOME/.npm:/home/node/.npm -s node -- npm ci
       - cache_save:
           key: 'npm-{{ hash "package-lock.json" }}-v1'
           path: ~/.npm
 
-      - run: wodby ci build node
+      - run: wodby ci build nginx --from dist
       - run: wodby ci release
       - run: wodby ci deploy

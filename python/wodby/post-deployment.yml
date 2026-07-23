@@ -1,0 +1,7 @@
+version: 0.1
+
+jobs:
+  python-application-check:
+    steps:
+      - run: |
+          python -c 'from python_boilerplate.main import app; print("application loaded")'

@@ -1,0 +1,7 @@
+version: 0.1
+
+jobs:
+  nextjs-application-check:
+    steps:
+      - run: |
+          node -e 'const pkg = require("./package.json"); console.log(`${pkg.name} loaded`)'

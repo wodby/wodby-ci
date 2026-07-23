@@ -15,14 +15,12 @@ jobs:
           key: 'composer-{{ hash "composer.lock" }}-v1'
 
       - run: wodby ci init $WODBY_BUILD_ID
-      - run: wodby ci run -v $HOME/.composer:/home/wodby/.composer -- composer install --prefer-dist -n --no-ansi
+      - run: wodby ci run -v $HOME/.composer:/home/wodby/.composer -s php -- composer install --prefer-dist -n --no-ansi
 
       - cache_save:
           key: 'composer-{{ hash "composer.lock" }}-v1'
           path: ~/.composer
 
       - run: wodby ci build
-      # To copy only a static subdirectory into Nginx:
-      # - run: wodby ci build nginx --from static --to /var/www/html/static
       - run: wodby ci release
       - run: wodby ci deploy

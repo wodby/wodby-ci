@@ -4,9 +4,6 @@ image:
   name: wodby/wodby-cli:2.0
   pull_policy: always
 
-variables:
-  WODBY_APP_SERVICE_ID: PASTE-APP_SERVICE_ID-HERE
-
 services:
   - name: docker:dind
     alias: docker
@@ -25,9 +22,9 @@ prod_deploy:
   stage: build_and_deploy
   script:
     - wodby ci init --dind $WODBY_APP_SERVICE_ID
-    - wodby ci run -v $CI_PROJECT_DIR/.composer:/home/wodby/.composer -- composer install --prefer-dist -n --no-dev
+    - wodby ci run -v $CI_PROJECT_DIR/.composer:/home/wodby/.composer -- composer install --prefer-dist -n --no-ansi
     - wodby ci build
     - wodby ci release
     - wodby ci deploy
-# optionally skip execution of post deployment scripts  
-#  - wodby ci deploy --skip-post-deploy
+    # Optionally skip post-deployment scripts:
+    # - wodby ci deploy --skip-post-deploy

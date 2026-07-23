@@ -1,0 +1,6 @@
+version: 0.1
+
+jobs:
+  matomo-console-check:
+    steps:
+      - run: php console --version

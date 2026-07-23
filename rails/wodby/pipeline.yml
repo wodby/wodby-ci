@@ -1,0 +1,15 @@
+version: 0.1
+
+workflows:
+  main:
+    jobs:
+      - build
+
+jobs:
+  build:
+    steps:
+      - clone
+      - run: wodby ci init $WODBY_BUILD_ID
+      - run: wodby ci build rails -f Dockerfile
+      - run: wodby ci release
+      - run: wodby ci deploy

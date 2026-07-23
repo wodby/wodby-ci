@@ -1,4 +1,4 @@
-name: Wodby Node Deploy
+name: Wodby Python Deploy
 
 on:
   push:
@@ -18,28 +18,24 @@ jobs:
 
       - uses: actions/cache@v5
         with:
-          path: ~/.npm
-          key: npm-v1-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          path: ~/.cache/uv
+          key: uv-v1-${{ runner.os }}-${{ hashFiles('uv.lock') }}
           restore-keys: |
-            npm-v1-${{ runner.os }}-
+            uv-v1-${{ runner.os }}-
 
       - uses: wodby/actions/setup-wodby-cli@v1
         with:
           api-key: ${{ secrets.WODBY_API_KEY }}
           app-service-id: ${{ vars.WODBY_APP_SERVICE_ID }}
 
-      - name: Install dependencies
-        run: wodby ci run -v $HOME/.npm:/home/node/.npm -- npm ci
+      - name: Run tests
+        run: wodby ci run -v $HOME/.cache/uv:/home/wodby/.cache/uv -s python -- uv run --frozen pytest
 
-      - name: Build images
-        run: wodby ci build
+      - name: Build image
+        run: wodby ci build python -f Dockerfile
 
-      - name: Release images
+      - name: Release image
         run: wodby ci release
 
       - name: Deploy
         run: wodby ci deploy
-
-      # Skip post-deployment scripts:
-      # - name: Deploy without post deployment scripts
-      #   run: wodby ci deploy --skip-post-deploy

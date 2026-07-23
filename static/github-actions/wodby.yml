@@ -1,4 +1,4 @@
-name: Wodby Node Deploy
+name: Wodby Static Deploy
 
 on:
   push:
@@ -29,17 +29,16 @@ jobs:
           app-service-id: ${{ vars.WODBY_APP_SERVICE_ID }}
 
       - name: Install dependencies
-        run: wodby ci run -v $HOME/.npm:/home/node/.npm -- npm ci
+        run: wodby ci run -v $HOME/.npm:/home/node/.npm -i wodby/node:24 -- npm ci
 
-      - name: Build images
-        run: wodby ci build
+      - name: Build frontend assets
+        run: wodby ci run -v $HOME/.npm:/home/node/.npm -i wodby/node:24 -- npm run build
 
-      - name: Release images
+      - name: Build Nginx image
+        run: wodby ci build nginx --from dist
+
+      - name: Release image
         run: wodby ci release
 
       - name: Deploy
         run: wodby ci deploy
-
-      # Skip post-deployment scripts:
-      # - name: Deploy without post deployment scripts
-      #   run: wodby ci deploy --skip-post-deploy

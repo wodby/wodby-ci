@@ -4,9 +4,6 @@ image:
   name: wodby/wodby-cli:2.0
   pull_policy: always
 
-variables:
-  WODBY_APP_SERVICE_ID: PASTE-APP_SERVICE_ID-HERE
-
 services:
   - name: docker:dind
     alias: docker
@@ -29,5 +26,5 @@ prod_deploy:
     - wodby ci build
     - wodby ci release
     - wodby ci deploy
-# optionally skip execution of post deployment scripts  
-#  - wodby ci deploy --skip-post-deploy
+    # Optionally skip post-deployment scripts:
+    # - wodby ci deploy --skip-post-deploy

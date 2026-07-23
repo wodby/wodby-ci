@@ -1,0 +1,6 @@
+version: 0.1
+
+jobs:
+  health-check:
+    steps:
+      - run: curl -fsS "http://${WODBY_APP_SERVICE_NAME}:8080/healthz"
