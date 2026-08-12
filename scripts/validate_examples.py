@@ -98,9 +98,11 @@ def validate_automatic_cache_examples(errors: list[str]) -> None:
     forbidden = (
         "/home/node/.npm",
         "/home/wodby/.composer",
+        "/home/wodby/.bundle/cache",
         "/home/wodby/.cache/uv",
         "NPM_CONFIG_CACHE",
         "COMPOSER_CACHE_DIR",
+        "BUNDLE_USER_CACHE",
         "UV_CACHE_DIR",
     )
     for path in sorted(REPOSITORY_ROOT.rglob("*.yml")):
