@@ -11,18 +11,21 @@ services:
 stages:
   - build_and_deploy
 
+variables:
+  WODBY_CI_CACHE_DIR: $CI_PROJECT_DIR/.wodby-cache
+
 cache:
   key:
     files:
       - composer.lock
   paths:
-    - .composer
+    - .wodby-cache/composer/
 
 prod_deploy:
   stage: build_and_deploy
   script:
     - wodby ci init --dind $WODBY_APP_SERVICE_ID
-    - wodby ci run -v $CI_PROJECT_DIR/.composer:/home/wodby/.composer -- composer install --prefer-dist -n --no-ansi
+    - wodby ci run -- composer install --prefer-dist -n --no-ansi
     - wodby ci build
     - wodby ci release
     - wodby ci deploy

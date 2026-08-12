@@ -11,15 +11,15 @@ jobs:
       - clone
 
       - cache_restore:
-          path: ~/.composer
+          path: ~/.composer/cache
           key: 'composer-{{ hash "composer.lock" }}-v1'
 
       - run: wodby ci init $WODBY_BUILD_ID
-      - run: wodby ci run -v $HOME/.composer:/home/wodby/.composer -s php -- composer install --prefer-dist -n --no-ansi
+      - run: wodby ci run -s php -- composer install --prefer-dist -n --no-ansi
 
       - cache_save:
           key: 'composer-{{ hash "composer.lock" }}-v1'
-          path: ~/.composer
+          path: ~/.composer/cache
 
       - run: wodby ci build
       - run: wodby ci release

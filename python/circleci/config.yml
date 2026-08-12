@@ -18,7 +18,7 @@ jobs:
 
       - run:
           name: Run tests
-          command: wodby ci run -v $HOME/.cache/uv:/home/wodby/.cache/uv -s python -- uv run --frozen pytest
+          command: wodby ci run -s python -- uv run --frozen pytest
 
       - save_cache:
           key: uv-v1-{{ checksum "uv.lock" }}

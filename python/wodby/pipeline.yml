@@ -15,7 +15,7 @@ jobs:
           key: 'uv-{{ hash "uv.lock" }}-v1'
 
       - run: wodby ci init $WODBY_BUILD_ID
-      - run: wodby ci run -v $HOME/.cache/uv:/home/wodby/.cache/uv -s python -- uv run --frozen pytest
+      - run: wodby ci run -s python -- uv run --frozen pytest
 
       - cache_save:
           key: 'uv-{{ hash "uv.lock" }}-v1'

@@ -15,7 +15,7 @@ jobs:
           key: 'npm-{{ hash "package-lock.json" }}-v1'
 
       - run: wodby ci init $WODBY_BUILD_ID
-      - run: wodby ci run -v $HOME/.npm:/home/node/.npm -s nextjs -- npm ci
+      - run: wodby ci run -s nextjs -- npm ci
 
       - cache_save:
           key: 'npm-{{ hash "package-lock.json" }}-v1'

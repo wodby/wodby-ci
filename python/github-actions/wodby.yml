@@ -16,20 +16,13 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: actions/cache@v5
-        with:
-          path: ~/.cache/uv
-          key: uv-v1-${{ runner.os }}-${{ hashFiles('uv.lock') }}
-          restore-keys: |
-            uv-v1-${{ runner.os }}-
-
       - uses: wodby/actions/setup-wodby-cli@v1
         with:
           api-key: ${{ secrets.WODBY_API_KEY }}
           app-service-id: ${{ vars.WODBY_APP_SERVICE_ID }}
 
       - name: Run tests
-        run: wodby ci run -v "$HOME/.cache/uv:/home/wodby/.cache/uv" -s python -- uv run --frozen pytest
+        run: wodby ci run -s python -- uv run --frozen pytest
 
       - name: Build image
         run: wodby ci build python -f Dockerfile

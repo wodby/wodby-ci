@@ -11,11 +11,11 @@ jobs:
       - clone
 
       - cache_restore:
-          path: ~/.composer
+          path: ~/.composer/cache
           key: 'composer-{{ hash "composer.lock" }}-v1'
 
       - run: wodby ci init $WODBY_BUILD_ID
-      - run: wodby ci run -v $HOME/.composer:/home/wodby/.composer -s php -- composer install --prefer-dist -n --no-ansi
+      - run: wodby ci run -s php -- composer install --prefer-dist -n --no-ansi
 
       # Enable these steps when the project builds frontend assets:
       # - run: wodby ci run -i wodby/node:24 -- npm ci
@@ -23,7 +23,7 @@ jobs:
 
       - cache_save:
           key: 'composer-{{ hash "composer.lock" }}-v1'
-          path: ~/.composer
+          path: ~/.composer/cache
 
       - run: wodby ci build php
       - run: wodby ci build nginx

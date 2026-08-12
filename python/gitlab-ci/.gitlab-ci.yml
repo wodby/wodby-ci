@@ -9,18 +9,21 @@ services:
 stages:
   - build_and_deploy
 
+variables:
+  WODBY_CI_CACHE_DIR: $CI_PROJECT_DIR/.wodby-cache
+
 cache:
   key:
     files:
       - uv.lock
   paths:
-    - .cache/uv/
+    - .wodby-cache/uv/
 
 prod_deploy:
   stage: build_and_deploy
   script:
     - wodby ci init --dind $WODBY_APP_SERVICE_ID
-    - wodby ci run -v $CI_PROJECT_DIR/.cache/uv:/home/wodby/.cache/uv -s python -- uv run --frozen pytest
+    - wodby ci run -s python -- uv run --frozen pytest
     - wodby ci build python -f Dockerfile
     - wodby ci release
     - wodby ci deploy

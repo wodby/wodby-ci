@@ -18,12 +18,12 @@ jobs:
 
       - run:
           name: Install composer dependencies
-          command: wodby ci run -v $HOME/.composer:/home/wodby/.composer -- composer install --prefer-dist -n --no-ansi
+          command: wodby ci run -- composer install --prefer-dist -n --no-ansi
       
       - save_cache:
           key: composer-v1-{{ checksum "composer.lock" }}
           paths:
-            - ~/.composer
+            - ~/.composer/cache
 
       - run: wodby ci build
       - run: wodby ci release

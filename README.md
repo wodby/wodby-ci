@@ -119,6 +119,17 @@ wodby ci build python -f Dockerfile
 See the [CI build documentation](https://wodby.com/docs/2.0/cicd/build) for Dockerfile resolution, build arguments, and
 cache backends.
 
+### Dependency caches
+
+`wodby ci run` automatically configures npm, Composer, and uv caches for supported Wodby and official images. Wodby
+images advertise their cache profile through image metadata, so application images derived from them inherit the same
+behavior. Use `--cache` to force a profile for another image or `--no-cache` to disable caching.
+
+GitHub Actions cache restore and save are handled by `wodby/actions/setup-wodby-cli` when it detects a supported
+lockfile. Other providers keep their native cache steps, but no longer need to pass cache volumes or package-manager
+environment variables to `wodby ci run`. GitLab examples set `WODBY_CI_CACHE_DIR` because GitLab persists cache paths
+from the project directory.
+
 ## Boilerplates
 
 - [PHP](https://github.com/wodby/php-package-boilerplate)

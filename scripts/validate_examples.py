@@ -83,7 +83,6 @@ def validate_github_examples(errors: list[str]) -> None:
         text = path.read_text()
         required = (
             "actions/checkout@v6",
-            "actions/cache@v5",
             "wodby/actions/setup-wodby-cli@v1",
             "${{ secrets.WODBY_API_KEY }}",
             "${{ vars.WODBY_APP_SERVICE_ID }}",
@@ -93,6 +92,31 @@ def validate_github_examples(errors: list[str]) -> None:
                 errors.append(f"{relative(path)}: missing required convention {value}")
         if "PASTE-APP_SERVICE_ID-HERE" in text:
             errors.append(f"{relative(path)}: use the WODBY_APP_SERVICE_ID variable")
+
+
+def validate_automatic_cache_examples(errors: list[str]) -> None:
+    forbidden = (
+        "/home/node/.npm",
+        "/home/wodby/.composer",
+        "/home/wodby/.cache/uv",
+        "NPM_CONFIG_CACHE",
+        "COMPOSER_CACHE_DIR",
+        "UV_CACHE_DIR",
+    )
+    for path in sorted(REPOSITORY_ROOT.rglob("*.yml")):
+        text = path.read_text()
+        for value in forbidden:
+            if value in text:
+                errors.append(
+                    f"{relative(path)}: cache profile should be managed automatically, found {value}"
+                )
+
+    for path in sorted(REPOSITORY_ROOT.glob("*/gitlab-ci/*.yml")):
+        text = path.read_text()
+        if ".wodby-cache/" in text and "WODBY_CI_CACHE_DIR" not in text:
+            errors.append(
+                f"{relative(path)}: GitLab project cache requires WODBY_CI_CACHE_DIR"
+            )
 
 
 def validate_third_party_variables(errors: list[str]) -> None:
@@ -153,6 +177,7 @@ def main() -> int:
     validate_yaml(errors)
     validate_wodby_pipelines(errors)
     validate_github_examples(errors)
+    validate_automatic_cache_examples(errors)
     validate_third_party_variables(errors)
     validate_example_coverage(errors)
     validate_readme(errors)

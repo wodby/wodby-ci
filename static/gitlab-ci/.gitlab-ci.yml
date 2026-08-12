@@ -9,19 +9,22 @@ services:
 stages:
   - build_and_deploy
 
+variables:
+  WODBY_CI_CACHE_DIR: $CI_PROJECT_DIR/.wodby-cache
+
 cache:
   key:
     files:
       - package-lock.json
   paths:
-    - .npm/
+    - .wodby-cache/npm/
 
 prod_deploy:
   stage: build_and_deploy
   script:
     - wodby ci init --dind $WODBY_APP_SERVICE_ID
-    - wodby ci run -v $CI_PROJECT_DIR/.npm:/home/node/.npm -i wodby/node:24 -- npm ci
-    - wodby ci run -v $CI_PROJECT_DIR/.npm:/home/node/.npm -i wodby/node:24 -- npm run build
+    - wodby ci run -i wodby/node:24 -- npm ci
+    - wodby ci run -i wodby/node:24 -- npm run build
     - wodby ci build nginx --from dist
     - wodby ci release
     - wodby ci deploy
