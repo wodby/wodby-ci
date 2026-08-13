@@ -1,0 +1,19 @@
+version: 2.1
+
+jobs:
+  build:
+    machine:
+      image: ubuntu-2404:current
+
+    steps:
+      - checkout
+      - run: wget -qO- https://api.wodby.com/v1/get/cli | sh
+      - run: wodby ci init $WODBY_APP_SERVICE_ID
+
+      - run:
+          name: Run tests
+          command: wodby ci run -s go -- go test ./...
+
+      - run: wodby ci build go -f Dockerfile
+      - run: wodby ci release
+      - run: wodby ci deploy

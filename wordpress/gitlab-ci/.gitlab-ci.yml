@@ -1,0 +1,26 @@
+image:
+  name: wodby/wodby-cli:2.0
+  pull_policy: always
+
+services:
+  - name: docker:dind
+    alias: docker
+
+stages:
+  - build_and_deploy
+
+cache:
+  key:
+    files:
+      - composer.lock
+  paths:
+    - .wodby-ci-cache/composer/
+
+prod_deploy:
+  stage: build_and_deploy
+  script:
+    - wodby ci init --dind $WODBY_APP_SERVICE_ID
+    - wodby ci run -s php -- composer install --prefer-dist -n --no-ansi
+    - wodby ci build
+    - wodby ci release
+    - wodby ci deploy

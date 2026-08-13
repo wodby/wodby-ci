@@ -1,0 +1,30 @@
+version: 2.1
+
+jobs:
+  build:
+    machine:
+      image: ubuntu-2404:current
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - composer-v1-{{ checksum "composer.lock" }}
+            - composer-v1-
+
+      - run: wget -qO- https://api.wodby.com/v1/get/cli | sh
+      - run: wodby ci init $WODBY_APP_SERVICE_ID
+
+      - run:
+          name: Install Composer dependencies
+          command: wodby ci run -s matomo -- composer install --prefer-dist -n --no-ansi
+
+      - save_cache:
+          key: composer-v1-{{ checksum "composer.lock" }}
+          paths:
+            - ~/.composer/cache
+
+      - run: wodby ci build
+      - run: wodby ci release
+      - run: wodby ci deploy

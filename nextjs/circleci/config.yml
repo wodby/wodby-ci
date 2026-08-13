@@ -1,0 +1,30 @@
+version: 2.1
+
+jobs:
+  build:
+    machine:
+      image: ubuntu-2404:current
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - npm-v1-{{ checksum "package-lock.json" }}
+            - npm-v1-
+
+      - run: wget -qO- https://api.wodby.com/v1/get/cli | sh
+      - run: wodby ci init $WODBY_APP_SERVICE_ID
+
+      - run:
+          name: Install dependencies
+          command: wodby ci run -s nextjs -- npm ci
+
+      - save_cache:
+          key: npm-v1-{{ checksum "package-lock.json" }}
+          paths:
+            - ~/.npm
+
+      - run: wodby ci build nextjs -f Dockerfile
+      - run: wodby ci release
+      - run: wodby ci deploy

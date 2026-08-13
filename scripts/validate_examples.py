@@ -12,15 +12,18 @@ import yaml
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-FULL_PROVIDER_EXAMPLES = ("php", "node", "static", "python")
-STACK_RECIPES = (
+FULL_PROVIDER_EXAMPLES = (
     "django",
     "drupal",
     "go",
     "laravel",
     "matomo",
     "nextjs",
+    "node",
+    "php",
+    "python",
     "rails",
+    "static",
     "wordpress",
 )
 APPLICATION_STACKS = (
@@ -41,6 +44,55 @@ APPLICATION_STACKS = (
     "Next.js",
     "Dagster",
 )
+EXPECTED_PROVIDER_COMMANDS = {
+    "django": (
+        "wodby ci run -s django -- uv run --frozen pytest",
+        "wodby ci build django -f Dockerfile",
+    ),
+    "drupal": (
+        "wodby ci run -s php -- composer install --prefer-dist -n --no-ansi",
+        "wodby ci build",
+    ),
+    "go": (
+        "wodby ci run -s go -- go test ./...",
+        "wodby ci build go -f Dockerfile",
+    ),
+    "laravel": (
+        "wodby ci run -s php -- composer install --prefer-dist -n --no-ansi",
+        "wodby ci build php",
+        "wodby ci build nginx",
+    ),
+    "matomo": (
+        "wodby ci run -s matomo -- composer install --prefer-dist -n --no-ansi",
+        "wodby ci build",
+    ),
+    "nextjs": (
+        "wodby ci run -s nextjs -- npm ci",
+        "wodby ci build nextjs -f Dockerfile",
+    ),
+    "node": (
+        "npm ci",
+        "wodby ci build",
+    ),
+    "php": (
+        "wodby ci run -- composer install --prefer-dist -n --no-ansi",
+        "wodby ci build",
+    ),
+    "python": (
+        "wodby ci run -s python -- uv run --frozen pytest",
+        "wodby ci build python -f Dockerfile",
+    ),
+    "rails": ("wodby ci build rails -f Dockerfile",),
+    "static": (
+        "wodby ci run -i wodby/node:24 -- npm ci",
+        "wodby ci run -i wodby/node:24 -- npm run build",
+        "wodby ci build nginx --from dist",
+    ),
+    "wordpress": (
+        "wodby ci run -s php -- composer install --prefer-dist -n --no-ansi",
+        "wodby ci build",
+    ),
+}
 MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 
 
@@ -116,10 +168,16 @@ def validate_automatic_cache_examples(errors: list[str]) -> None:
                 )
 
     native_paths = {
+        "django": "~/.cache/uv",
+        "drupal": "~/.composer/cache",
+        "laravel": "~/.composer/cache",
+        "matomo": "~/.composer/cache",
+        "nextjs": "~/.npm",
         "node": "~/.npm",
-        "static": "~/.npm",
         "php": "~/.composer/cache",
         "python": "~/.cache/uv",
+        "static": "~/.npm",
+        "wordpress": "~/.composer/cache",
     }
     for example, expected in native_paths.items():
         for provider_path in ("wodby/pipeline.yml", "circleci/config.yml"):
@@ -128,29 +186,22 @@ def validate_automatic_cache_examples(errors: list[str]) -> None:
                 errors.append(f"{relative(path)}: missing cache path {expected}")
 
     dind_profiles = {
+        "django": "uv",
+        "drupal": "composer",
+        "laravel": "composer",
+        "matomo": "composer",
+        "nextjs": "npm",
         "node": "npm",
-        "static": "npm",
         "php": "composer",
         "python": "uv",
+        "static": "npm",
+        "wordpress": "composer",
     }
     for example, profile in dind_profiles.items():
         path = REPOSITORY_ROOT / example / "gitlab-ci/.gitlab-ci.yml"
         expected = f".wodby-ci-cache/{profile}"
         if expected not in path.read_text():
             errors.append(f"{relative(path)}: missing DinD cache path {expected}")
-
-    recipe_paths = {
-        "django": "~/.cache/uv",
-        "drupal": "~/.composer/cache",
-        "laravel": "~/.composer/cache",
-        "matomo": "~/.composer/cache",
-        "nextjs": "~/.npm",
-        "wordpress": "~/.composer/cache",
-    }
-    for example, expected in recipe_paths.items():
-        path = REPOSITORY_ROOT / example / "wodby/pipeline.yml"
-        if expected not in path.read_text():
-            errors.append(f"{relative(path)}: missing cache path {expected}")
 
     if ".wodby-ci-cache/" not in (REPOSITORY_ROOT / ".gitignore").read_text():
         errors.append(".gitignore: missing .wodby-ci-cache/")
@@ -182,11 +233,23 @@ def validate_example_coverage(errors: list[str]) -> None:
             if not path.is_file():
                 errors.append(f"{relative(path)}: missing canonical provider example")
 
-    for recipe in STACK_RECIPES:
-        for name in ("pipeline.yml", "post-deployment.yml"):
-            path = REPOSITORY_ROOT / recipe / "wodby" / name
+
+def validate_provider_commands(errors: list[str]) -> None:
+    provider_paths = (
+        "wodby/pipeline.yml",
+        "github-actions/wodby.yml",
+        "gitlab-ci/.gitlab-ci.yml",
+        "circleci/config.yml",
+    )
+    for example, commands in EXPECTED_PROVIDER_COMMANDS.items():
+        for provider_path in provider_paths:
+            path = REPOSITORY_ROOT / example / provider_path
             if not path.is_file():
-                errors.append(f"{relative(path)}: missing stack recipe")
+                continue
+            text = path.read_text()
+            for command in commands:
+                if command not in text:
+                    errors.append(f"{relative(path)}: missing command {command}")
 
 
 def validate_readme(errors: list[str]) -> None:
@@ -217,6 +280,7 @@ def main() -> int:
     validate_automatic_cache_examples(errors)
     validate_third_party_variables(errors)
     validate_example_coverage(errors)
+    validate_provider_commands(errors)
     validate_readme(errors)
 
     if errors:

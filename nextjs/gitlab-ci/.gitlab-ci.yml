@@ -1,0 +1,26 @@
+image:
+  name: wodby/wodby-cli:2.0
+  pull_policy: always
+
+services:
+  - name: docker:dind
+    alias: docker
+
+stages:
+  - build_and_deploy
+
+cache:
+  key:
+    files:
+      - package-lock.json
+  paths:
+    - .wodby-ci-cache/npm/
+
+prod_deploy:
+  stage: build_and_deploy
+  script:
+    - wodby ci init --dind $WODBY_APP_SERVICE_ID
+    - wodby ci run -s nextjs -- npm ci
+    - wodby ci build nextjs -f Dockerfile
+    - wodby ci release
+    - wodby ci deploy

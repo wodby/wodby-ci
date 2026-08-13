@@ -7,38 +7,30 @@ For Wodby 1.0, see the [1.0 branch](https://github.com/wodby/wodby-ci/tree/1.0).
 
 ## Choose an example
 
-The full provider matrices cover the reusable build patterns shared by most application stacks.
+Every source-build example includes Wodby CI, GitHub Actions, GitLab CI, and CircleCI configurations.
 
-| Build pattern | Wodby CI | GitHub Actions | GitLab CI | CircleCI | Post-deployment |
+| Example | Wodby CI | GitHub Actions | GitLab CI | CircleCI | Post-deployment |
 | --- | --- | --- | --- | --- | --- |
 | PHP multi-image | [Pipeline](php/wodby/pipeline.yml) | [Workflow](php/github-actions/wodby.yml) | [Pipeline](php/gitlab-ci/.gitlab-ci.yml) | [Config](php/circleci/config.yml) | [Runtime check](php/wodby/post-deployment.yml) |
 | Node.js server | [Pipeline](node/wodby/pipeline.yml) | [Workflow](node/github-actions/wodby.yml) | [Pipeline](node/gitlab-ci/.gitlab-ci.yml) | [Config](node/circleci/config.yml) | [Runtime check](node/wodby/post-deployment.yml) |
 | Static frontend to Nginx | [Pipeline](static/wodby/pipeline.yml) | [Workflow](static/github-actions/wodby.yml) | [Pipeline](static/gitlab-ci/.gitlab-ci.yml) | [Config](static/circleci/config.yml) | [Nginx check](static/wodby/post-deployment.yml) |
 | Python custom Dockerfile | [Pipeline](python/wodby/pipeline.yml) | [Workflow](python/github-actions/wodby.yml) | [Pipeline](python/gitlab-ci/.gitlab-ci.yml) | [Config](python/circleci/config.yml) | [Application check](python/wodby/post-deployment.yml) |
+| Drupal | [Pipeline](drupal/wodby/pipeline.yml) | [Workflow](drupal/github-actions/wodby.yml) | [Pipeline](drupal/gitlab-ci/.gitlab-ci.yml) | [Config](drupal/circleci/config.yml) | [Drush status](drupal/wodby/post-deployment.yml) |
+| WordPress | [Pipeline](wordpress/wodby/pipeline.yml) | [Workflow](wordpress/github-actions/wodby.yml) | [Pipeline](wordpress/gitlab-ci/.gitlab-ci.yml) | [Config](wordpress/circleci/config.yml) | [WP-CLI check](wordpress/wodby/post-deployment.yml) |
+| Laravel | [Pipeline](laravel/wodby/pipeline.yml) | [Workflow](laravel/github-actions/wodby.yml) | [Pipeline](laravel/gitlab-ci/.gitlab-ci.yml) | [Config](laravel/circleci/config.yml) | [Artisan check](laravel/wodby/post-deployment.yml) |
+| Matomo | [Pipeline](matomo/wodby/pipeline.yml) | [Workflow](matomo/github-actions/wodby.yml) | [Pipeline](matomo/gitlab-ci/.gitlab-ci.yml) | [Config](matomo/circleci/config.yml) | [Console check](matomo/wodby/post-deployment.yml) |
+| Django | [Pipeline](django/wodby/pipeline.yml) | [Workflow](django/github-actions/wodby.yml) | [Pipeline](django/gitlab-ci/.gitlab-ci.yml) | [Config](django/circleci/config.yml) | [System check](django/wodby/post-deployment.yml) |
+| Rails | [Pipeline](rails/wodby/pipeline.yml) | [Workflow](rails/github-actions/wodby.yml) | [Pipeline](rails/gitlab-ci/.gitlab-ci.yml) | [Config](rails/circleci/config.yml) | [Application check](rails/wodby/post-deployment.yml) |
+| Go | [Pipeline](go/wodby/pipeline.yml) | [Workflow](go/github-actions/wodby.yml) | [Pipeline](go/gitlab-ci/.gitlab-ci.yml) | [Config](go/circleci/config.yml) | [Health check](go/wodby/post-deployment.yml) |
+| Next.js | [Pipeline](nextjs/wodby/pipeline.yml) | [Workflow](nextjs/github-actions/wodby.yml) | [Pipeline](nextjs/gitlab-ci/.gitlab-ci.yml) | [Config](nextjs/circleci/config.yml) | [Application check](nextjs/wodby/post-deployment.yml) |
 
 The static example expects `npm run build` to write to `dist`. Change `--from dist` when the framework uses a different
 output directory. The Python example follows the
 [Python boilerplate](https://github.com/wodby/python-boilerplate) conventions: `uv.lock`, `pytest`, `Dockerfile`, and
 the `python_boilerplate` package.
 
-## Stack-specific Wodby CI recipes
-
-These recipes add framework-specific build commands and safe post-deployment checks without duplicating every
-third-party provider wrapper.
-
-Laravel queue and Rails Sidekiq are service derivatives of their main runtimes. Their recipes build the application
+Laravel queue and Rails Sidekiq are service derivatives of their main runtimes. Their examples build the application
 image once; the stack reuses that image for the corresponding worker service.
-
-| Stack | Pipeline | Post-deployment | Boilerplate or source template |
-| --- | --- | --- | --- |
-| Drupal | [Pipeline](drupal/wodby/pipeline.yml) | [`drush status`](drupal/wodby/post-deployment.yml) | [Drupal Vanilla](https://github.com/wodby/drupal-vanilla) or [Drupal CMS](https://github.com/wodby/drupal-cms-template) |
-| WordPress | [Pipeline](wordpress/wodby/pipeline.yml) | [WP-CLI check](wordpress/wodby/post-deployment.yml) | [WordPress Vanilla](https://github.com/wodby/wordpress-vanilla) |
-| Laravel | [Pipeline](laravel/wodby/pipeline.yml) | [Artisan check](laravel/wodby/post-deployment.yml) | [Laravel](https://github.com/laravel/laravel) |
-| Matomo | [Pipeline](matomo/wodby/pipeline.yml) | [Console check](matomo/wodby/post-deployment.yml) | [Matomo](https://github.com/matomo-org/matomo) |
-| Django | [Pipeline](django/wodby/pipeline.yml) | [System check](django/wodby/post-deployment.yml) | [Django boilerplate](https://github.com/wodby/django-boilerplate) |
-| Rails | [Pipeline](rails/wodby/pipeline.yml) | [Application check](rails/wodby/post-deployment.yml) | [Rails boilerplate](https://github.com/wodby/rails-boilerplate) |
-| Go | [Pipeline](go/wodby/pipeline.yml) | [Health check](go/wodby/post-deployment.yml) | [Go boilerplate](https://github.com/wodby/go-boilerplate) |
-| Next.js | [Pipeline](nextjs/wodby/pipeline.yml) | [Application check](nextjs/wodby/post-deployment.yml) | [Next.js boilerplate](https://github.com/wodby/nextjs-boilerplate) |
 
 Post-deployment jobs should be safe to retry. Use them for smoke checks and idempotent application operations, and
 remember that a post-deployment failure is reported separately from the completed deployment.
