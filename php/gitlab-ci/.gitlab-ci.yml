@@ -11,15 +11,12 @@ services:
 stages:
   - build_and_deploy
 
-variables:
-  WODBY_CI_CACHE_DIR: $CI_PROJECT_DIR/.wodby-cache
-
 cache:
   key:
     files:
       - composer.lock
   paths:
-    - .wodby-cache/composer/
+    - .wodby-ci-cache/composer/
 
 prod_deploy:
   stage: build_and_deploy

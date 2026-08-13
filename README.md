@@ -127,8 +127,9 @@ same behavior. Use `--cache` to force a profile for another image or `--no-cache
 
 GitHub Actions cache restore and save are handled by `wodby/actions/setup-wodby-cli` when it detects a supported
 lockfile. Other providers keep their native cache steps, but no longer need to pass cache volumes or package-manager
-environment variables to `wodby ci run`. GitLab examples set `WODBY_CI_CACHE_DIR` because GitLab persists cache paths
-from the project directory.
+environment variables to `wodby ci run`. Native Docker environments use the package managers' conventional user cache
+paths. Docker-in-Docker jobs stage persistent data under `.wodby-ci-cache/<profile>` in the CI context, import it into
+their data volume during `wodby ci init`, and export it after each cache-enabled `wodby ci run`.
 
 ## Boilerplates
 

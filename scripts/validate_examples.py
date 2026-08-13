@@ -100,6 +100,8 @@ def validate_automatic_cache_examples(errors: list[str]) -> None:
         "/home/wodby/.composer",
         "/home/wodby/.bundle/cache",
         "/home/wodby/.cache/uv",
+        ".wodby-cache/",
+        "WODBY_CI_CACHE_DIR",
         "NPM_CONFIG_CACHE",
         "COMPOSER_CACHE_DIR",
         "BUNDLE_USER_CACHE",
@@ -113,12 +115,45 @@ def validate_automatic_cache_examples(errors: list[str]) -> None:
                     f"{relative(path)}: cache profile should be managed automatically, found {value}"
                 )
 
-    for path in sorted(REPOSITORY_ROOT.glob("*/gitlab-ci/*.yml")):
-        text = path.read_text()
-        if ".wodby-cache/" in text and "WODBY_CI_CACHE_DIR" not in text:
-            errors.append(
-                f"{relative(path)}: GitLab project cache requires WODBY_CI_CACHE_DIR"
-            )
+    native_paths = {
+        "node": "~/.npm",
+        "static": "~/.npm",
+        "php": "~/.composer/cache",
+        "python": "~/.cache/uv",
+    }
+    for example, expected in native_paths.items():
+        for provider_path in ("wodby/pipeline.yml", "circleci/config.yml"):
+            path = REPOSITORY_ROOT / example / provider_path
+            if expected not in path.read_text():
+                errors.append(f"{relative(path)}: missing cache path {expected}")
+
+    dind_profiles = {
+        "node": "npm",
+        "static": "npm",
+        "php": "composer",
+        "python": "uv",
+    }
+    for example, profile in dind_profiles.items():
+        path = REPOSITORY_ROOT / example / "gitlab-ci/.gitlab-ci.yml"
+        expected = f".wodby-ci-cache/{profile}"
+        if expected not in path.read_text():
+            errors.append(f"{relative(path)}: missing DinD cache path {expected}")
+
+    recipe_paths = {
+        "django": "~/.cache/uv",
+        "drupal": "~/.composer/cache",
+        "laravel": "~/.composer/cache",
+        "matomo": "~/.composer/cache",
+        "nextjs": "~/.npm",
+        "wordpress": "~/.composer/cache",
+    }
+    for example, expected in recipe_paths.items():
+        path = REPOSITORY_ROOT / example / "wodby/pipeline.yml"
+        if expected not in path.read_text():
+            errors.append(f"{relative(path)}: missing cache path {expected}")
+
+    if ".wodby-ci-cache/" not in (REPOSITORY_ROOT / ".gitignore").read_text():
+        errors.append(".gitignore: missing .wodby-ci-cache/")
 
 
 def validate_third_party_variables(errors: list[str]) -> None:

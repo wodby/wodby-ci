@@ -9,15 +9,12 @@ services:
 stages:
   - build_and_deploy
 
-variables:
-  WODBY_CI_CACHE_DIR: $CI_PROJECT_DIR/.wodby-cache
-
 cache:
   key:
     files:
       - uv.lock
   paths:
-    - .wodby-cache/uv/
+    - .wodby-ci-cache/uv/
 
 prod_deploy:
   stage: build_and_deploy
