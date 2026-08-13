@@ -8,8 +8,8 @@
 
 wget -qO- https://api.wodby.com/api/v1/get/cli | sh
 wodby ci init $WODBY_INSTANCE_UUID
-wodby ci run -i wodby/node:8 -- yarn install
-wodby ci run -i wodby/node:8 -- yarn run build
+wodby ci run -i wodby/node:24 -- npm ci
+wodby ci run -i wodby/node:24 -- npm run build
 wodby ci build --from ./build
 wodby ci release
 wodby ci deploy

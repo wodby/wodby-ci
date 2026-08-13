@@ -5,8 +5,6 @@ on:
     branches:
     - 'main'
 
-  pull_request:
-
 env:
   WODBY_INSTANCE_UUID: your-uuid
   WODBY_API_KEY: ${{ secrets.WODBY_API_KEY }}
@@ -15,10 +13,10 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v3
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
       with:
-        node-version: 16
+        node-version: 24
         cache: 'npm'
     
     - name: Get Wodby CLI
@@ -28,7 +26,7 @@ jobs:
       run: wodby ci init $WODBY_INSTANCE_UUID
 
     - name: Install node dependencies
-      run: npm i
+      run: npm ci
 
     - name: Build application
       run: npm run build

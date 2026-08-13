@@ -8,7 +8,7 @@ version: 2
 jobs:
   build:
     machine: 
-      image: ubuntu-2004:2024.08.1
+      image: ubuntu-2404:current
 
     steps:
       - checkout
@@ -20,13 +20,10 @@ jobs:
 
       - run: wget -qO- https://api.wodby.com/api/v1/get/cli | sh
       - run: wodby ci init $WODBY_INSTANCE_UUID
-      - run:
-          name: Fix .composer permissions
-          command: wodby ci run -v $HOME/.composer:/home/wodby/.composer --user root -- chown -R 1000:1000 /home/wodby/.composer
 
       - run: 
           name: Install composer dependencies
-          command: wodby ci run -v $HOME/.composer:/home/wodby/.composer -s php -- composer install -n
+          command: wodby ci run -s php -- composer install -n
 
 ## When you need to use a checkout key for private repositories:
 #       - run: 
@@ -34,13 +31,12 @@ jobs:
 #           command: wodby ci run \
 #             -v /home/circleci/.ssh/known_hosts:/home/wodby/.ssh/known_hosts \
 #             -v /home/circleci/.ssh/id_rsa_[your-checkout-key-fingerprint]:/home/wodby/.ssh/id_rsa \
-#             -v $HOME/.composer:/home/wodby/.composer \
 #             -s php -- composer install -n
 
       - save_cache:
           key: composer-v1-{{ checksum "composer.lock" }}
           paths:
-            - ~/.composer
+            - ~/.composer/cache
 
       - run: wodby ci build --from ./
       - run: wodby ci release

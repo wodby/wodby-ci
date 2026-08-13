@@ -1,15 +1,22 @@
-image: wodby/wodby-cli
+image: wodby/wodby-cli:1.0.3
 
 variables:
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
 
 services:
-- name: docker:24.0-dind
+- name: docker:dind
   alias: docker
 
 stages:
 - deploy
+
+cache:
+  key:
+    files:
+    - composer.lock
+  paths:
+  - .wodby-ci-cache/composer/
 
 prod_deploy:
   stage: deploy

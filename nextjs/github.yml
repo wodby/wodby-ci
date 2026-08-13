@@ -8,8 +8,6 @@ on:
     tags:
       - '*'
 
-  pull_request:
-
 env:
   APP_INSTANCE_ID: MY-APP-INSTANCE-ID
   WODBY_API_KEY: ${{ secrets.WODBY_API_KEY }}
@@ -19,10 +17,10 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           cache: 'npm'
       - name: Install node modules
         run: npm install

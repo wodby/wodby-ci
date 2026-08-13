@@ -7,7 +7,7 @@
 
 wget -qO- https://api.wodby.com/api/v1/get/cli | sh
 wodby ci init $WODBY_INSTANCE_UUID
-wodby ci run -v $HOME/.composer:/home/wodby/.composer -s php -- composer install -n
+wodby ci run -s php -- composer install -n
 wodby ci build
 wodby ci release
 wodby ci deploy
