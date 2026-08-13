@@ -3,7 +3,7 @@
 # 2. Builds and pushes default images with contents of the current directory (./)
 # 3. Deploys build to your app instance
 
-image: wodby/wodby-cli:1.0.3
+image: wodby/wodby-cli:1.0.5
 
 options:
   docker: true

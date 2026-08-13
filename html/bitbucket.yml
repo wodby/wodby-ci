@@ -4,7 +4,7 @@
 # 3. Builds and pushes a docker image (HTTP server) with contents of the build (./build)
 # 4. Deploys this image to your HTML app instance
 
-image: wodby/wodby-cli:1.0.3
+image: wodby/wodby-cli:1.0.5
 
 options:
   docker: true
