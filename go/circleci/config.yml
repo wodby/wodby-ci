@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  wodby: wodby/setup-wodby-cli@1
+
 jobs:
   build:
     machine:
@@ -7,8 +10,8 @@ jobs:
 
     steps:
       - checkout
-      - run: wget -qO- https://api.wodby.com/v1/get/cli | sh
-      - run: wodby ci init $WODBY_APP_SERVICE_ID
+      - wodby/setup:
+          app-service-id: $WODBY_APP_SERVICE_ID
 
       - run:
           name: Run tests

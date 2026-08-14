@@ -146,6 +146,25 @@ def validate_github_examples(errors: list[str]) -> None:
             errors.append(f"{relative(path)}: use the WODBY_APP_SERVICE_ID variable")
 
 
+def validate_circleci_examples(errors: list[str]) -> None:
+    for path in sorted(REPOSITORY_ROOT.glob("*/circleci/config.yml")):
+        text = path.read_text()
+        required = (
+            "wodby: wodby/setup-wodby-cli@1",
+            "- wodby/setup:",
+            "app-service-id: $WODBY_APP_SERVICE_ID",
+        )
+        for value in required:
+            if value not in text:
+                errors.append(f"{relative(path)}: missing required convention {value}")
+        for value in (
+            "api.wodby.com/v1/get/cli",
+            "- run: wodby ci init $WODBY_APP_SERVICE_ID",
+        ):
+            if value in text:
+                errors.append(f"{relative(path)}: orb setup replaces {value}")
+
+
 def validate_automatic_cache_examples(errors: list[str]) -> None:
     forbidden = (
         "/home/node/.npm",
@@ -277,6 +296,7 @@ def main() -> int:
     validate_yaml(errors)
     validate_wodby_pipelines(errors)
     validate_github_examples(errors)
+    validate_circleci_examples(errors)
     validate_automatic_cache_examples(errors)
     validate_third_party_variables(errors)
     validate_example_coverage(errors)
