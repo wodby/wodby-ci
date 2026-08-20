@@ -74,8 +74,21 @@ Third-party CI providers must install and authenticate Wodby CLI:
   Configure `WODBY_API_KEY` as a repository secret and `WODBY_APP_SERVICE_ID` as a repository variable.
 - GitLab CI uses `wodby/wodby-cli:2.0` with Docker-in-Docker. Configure `WODBY_API_KEY` as a masked CI/CD variable and
   `WODBY_APP_SERVICE_ID` as a CI/CD variable.
-- CircleCI uses a machine executor. Configure `WODBY_API_KEY` and `WODBY_APP_SERVICE_ID` as project environment
+- CircleCI uses the public [`wodby/setup-wodby-cli@1`](https://circleci.com/developer/orbs/orb/wodby/setup-wodby-cli)
+  orb with a machine executor. The `wodby/setup` command installs the latest Wodby 2 CLI and runs `wodby ci init`
+  when `app-service-id` is provided. Configure `WODBY_API_KEY` and `WODBY_APP_SERVICE_ID` as project environment
   variables.
+
+The CircleCI examples declare and initialize the Orb like this:
+
+```yaml
+orbs:
+  wodby: wodby/setup-wodby-cli@1
+
+steps:
+  - wodby/setup:
+      app-service-id: $WODBY_APP_SERVICE_ID
+```
 
 VM-based executors are preferable when a provider supports them. Container-only executors require
 Docker-in-Docker because `wodby ci build` creates Docker images.
