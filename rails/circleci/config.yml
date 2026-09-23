@@ -13,5 +13,5 @@ jobs:
       - wodby/setup:
           app-service-id: $WODBY_APP_SERVICE_ID
       - run: wodby ci build rails -f Dockerfile
-      - run: wodby ci release
+      - run: wodby ci push
       - run: wodby ci deploy

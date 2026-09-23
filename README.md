@@ -5,6 +5,10 @@ Copyable CI/CD examples for Wodby 2.0, covering Wodby CI, GitHub Actions, GitLab
 For Wodby 1.0, see the [1.0 branch](https://github.com/wodby/wodby-ci/tree/1.0). The complete Wodby CI reference is in the
 [Wodby documentation](https://wodby.com/docs/2.0/cicd/wodby-ci).
 
+Use `wodby ci push` to upload built images, then `wodby ci deploy` to deploy them.
+`wodby ci release` remains a compatibility alias for `wodby ci push`. If your installed CLI
+does not recognize `push`, upgrade it or continue using `release`.
+
 ## Choose an example
 
 Every source-build example includes Wodby CI, GitHub Actions, GitLab CI, and CircleCI configurations.
@@ -100,7 +104,7 @@ The common pipeline flow is:
 1. Initialize the build with `wodby ci init`.
 2. Install dependencies or run tests with `wodby ci run`.
 3. Build one or more service images with `wodby ci build`.
-4. Push the built images with `wodby ci release`.
+4. Push the built images with `wodby ci push`.
 5. Trigger deployment with `wodby ci deploy`.
 
 If no service is supplied, `wodby ci build` builds all configured image targets. Use a service name to build selectively:

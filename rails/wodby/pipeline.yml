@@ -11,5 +11,5 @@ jobs:
       - clone
       - run: wodby ci init $WODBY_BUILD_ID
       - run: wodby ci build rails -f Dockerfile
-      - run: wodby ci release
+      - run: wodby ci push
       - run: wodby ci deploy

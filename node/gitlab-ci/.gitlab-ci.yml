@@ -24,7 +24,7 @@ prod_deploy:
     - wodby ci init --dind $WODBY_APP_SERVICE_ID
     - wodby ci run -- npm ci
     - wodby ci build
-    - wodby ci release
+    - wodby ci push
     - wodby ci deploy
     # Optionally skip post-deployment scripts:
     # - wodby ci deploy --skip-post-deploy

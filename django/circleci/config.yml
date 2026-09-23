@@ -29,5 +29,5 @@ jobs:
             - ~/.cache/uv
 
       - run: wodby ci build django -f Dockerfile
-      - run: wodby ci release
+      - run: wodby ci push
       - run: wodby ci deploy

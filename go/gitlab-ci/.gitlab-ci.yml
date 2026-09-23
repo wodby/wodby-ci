@@ -15,5 +15,5 @@ prod_deploy:
     - wodby ci init --dind $WODBY_APP_SERVICE_ID
     - wodby ci run -s go -- go test ./...
     - wodby ci build go -f Dockerfile
-    - wodby ci release
+    - wodby ci push
     - wodby ci deploy

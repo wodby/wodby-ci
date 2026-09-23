@@ -22,5 +22,5 @@ jobs:
           path: ~/.cache/uv
 
       - run: wodby ci build python -f Dockerfile
-      - run: wodby ci release
+      - run: wodby ci push
       - run: wodby ci deploy
