@@ -11,5 +11,5 @@ wodby ci init $WODBY_INSTANCE_UUID
 wodby ci run -i wodby/node:24 -- npm ci
 wodby ci run -i wodby/node:24 -- npm run build
 wodby ci build --from ./build
-wodby ci release
+wodby ci push
 wodby ci deploy

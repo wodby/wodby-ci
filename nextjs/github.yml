@@ -34,5 +34,5 @@ jobs:
           
           wodby ci init ${{ env.APP_INSTANCE_ID }}
           wodby ci build node --dockerfile Dockerfile 
-          wodby ci release
+          wodby ci push
           wodby ci deploy

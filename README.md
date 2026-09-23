@@ -2,7 +2,11 @@
 
 The following examples ought to help you set up CI/CD workflow on Wodby.
 
-See full documentation on CI/CD workflow at https://wodby.com/docs/apps/deploy/#cicd
+See full documentation on CI/CD workflow at https://wodby.com/docs/1.0/cicd/third-party/
+
+Use `wodby ci push` to upload built images, then `wodby ci deploy` to deploy them.
+`wodby ci release` remains a compatibility alias for `wodby ci push`. If your installed CLI
+does not recognize `push`, upgrade it or continue using `release`.
 
 ## Dependency caches
 
