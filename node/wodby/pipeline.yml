@@ -22,5 +22,5 @@ jobs:
           path: ~/.npm
 
       - run: wodby ci build node
-      - run: wodby ci release
+      - run: wodby ci push
       - run: wodby ci deploy

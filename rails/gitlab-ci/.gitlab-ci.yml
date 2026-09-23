@@ -14,5 +14,5 @@ prod_deploy:
   script:
     - wodby ci init --dind $WODBY_APP_SERVICE_ID
     - wodby ci build rails -f Dockerfile
-    - wodby ci release
+    - wodby ci push
     - wodby ci deploy

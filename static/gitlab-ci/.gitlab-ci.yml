@@ -23,5 +23,5 @@ prod_deploy:
     - wodby ci run -i wodby/node:24 -- npm ci
     - wodby ci run -i wodby/node:24 -- npm run build
     - wodby ci build nginx --from dist
-    - wodby ci release
+    - wodby ci push
     - wodby ci deploy

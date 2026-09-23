@@ -27,8 +27,8 @@ jobs:
       - name: Build image
         run: wodby ci build nextjs -f Dockerfile
 
-      - name: Release image
-        run: wodby ci release
+      - name: Push image
+        run: wodby ci push
 
       - name: Deploy
         run: wodby ci deploy

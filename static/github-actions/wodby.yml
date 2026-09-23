@@ -30,8 +30,8 @@ jobs:
       - name: Build Nginx image
         run: wodby ci build nginx --from dist
 
-      - name: Release image
-        run: wodby ci release
+      - name: Push image
+        run: wodby ci push
 
       - name: Deploy
         run: wodby ci deploy

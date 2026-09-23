@@ -36,8 +36,8 @@ jobs:
       - name: Build Nginx image
         run: wodby ci build nginx
 
-      - name: Release images
-        run: wodby ci release
+      - name: Push images
+        run: wodby ci push
 
       - name: Deploy
         run: wodby ci deploy

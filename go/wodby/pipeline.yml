@@ -12,5 +12,5 @@ jobs:
       - run: wodby ci init $WODBY_BUILD_ID
       - run: wodby ci run -s go -- go test ./...
       - run: wodby ci build go -f Dockerfile
-      - run: wodby ci release
+      - run: wodby ci push
       - run: wodby ci deploy
