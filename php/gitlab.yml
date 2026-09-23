@@ -28,5 +28,5 @@ prod_deploy:
 #  - wodby ci build php --from ./ --dockerfile Dockerfile
 #  - wodby ci build crond --from ./ --dockerfile Dockerfile
 #  - wodby ci build sshd --from ./ --dockerfile Dockerfile
-  - wodby ci release
+  - wodby ci push
   - wodby ci deploy

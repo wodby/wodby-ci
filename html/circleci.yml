@@ -33,5 +33,5 @@ jobs:
 
       - run: wodby ci run -i wodby/node:24 -- npm run build
       - run: wodby ci build --from ./build
-      - run: wodby ci release
+      - run: wodby ci push
       - run: wodby ci deploy

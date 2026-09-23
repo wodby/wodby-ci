@@ -20,7 +20,7 @@ pipelines:
           # For frontend dependencies in a subdirectory, pass a path relative to the app root.
           # - wodby ci run -i wodby/node:24 -p path/to/frontend -- npm ci
           - wodby ci build --from ./
-          - wodby ci release
+          - wodby ci push
           - wodby ci deploy
         services:
           - docker
