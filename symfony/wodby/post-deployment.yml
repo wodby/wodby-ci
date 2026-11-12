@@ -1,0 +1,6 @@
+version: 0.1
+
+jobs:
+  symfony-application-check:
+    steps:
+      - run: php bin/console about

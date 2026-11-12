@@ -1,0 +1,28 @@
+version: 0.1
+
+workflows:
+  main:
+    jobs:
+      - build
+
+jobs:
+  build:
+    steps:
+      - clone
+
+      - cache_restore:
+          path: ~/.npm
+          key: 'npm-{{ hash "package-lock.json" }}-v1'
+
+      - run: wodby ci init $WODBY_BUILD_ID
+      - run: wodby ci run -i wodby/node -- npm ci
+      - run: wodby ci run -i wodby/node -- npm test
+      - run: wodby ci run -i wodby/node -- npm run build
+
+      - cache_save:
+          key: 'npm-{{ hash "package-lock.json" }}-v1'
+          path: ~/.npm
+
+      - run: wodby ci build vue --from dist
+      - run: wodby ci push
+      - run: wodby ci deploy

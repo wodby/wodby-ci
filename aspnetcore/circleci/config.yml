@@ -1,0 +1,24 @@
+version: 2.1
+
+orbs:
+  wodby: wodby/setup-wodby-cli@1
+
+jobs:
+  build:
+    machine:
+      image: ubuntu-2604:current
+
+    steps:
+      - checkout
+
+      - wodby/setup:
+          app-service-id: $WODBY_APP_SERVICE_ID
+
+      # The service image has the runtime only; tests run in the matching SDK image.
+      - run:
+          name: Run tests
+          command: wodby ci run -i wodby/dotnet:10.0-dev -- dotnet test --solution App.slnx
+
+      - run: wodby ci build aspnetcore -f Dockerfile
+      - run: wodby ci push
+      - run: wodby ci deploy

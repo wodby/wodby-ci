@@ -1,0 +1,9 @@
+version: 0.1
+
+jobs:
+  ruby-health-check:
+    steps:
+      - run: |
+          curl --fail --show-error --silent --retry 5 --retry-all-errors --retry-delay 2 \
+            --retry-connrefused \
+            "http://${WODBY_APP_SERVICE_NAME}:8080/healthz"

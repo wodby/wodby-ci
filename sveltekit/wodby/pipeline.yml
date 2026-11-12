@@ -1,0 +1,26 @@
+version: 0.1
+
+workflows:
+  main:
+    jobs:
+      - build
+
+jobs:
+  build:
+    steps:
+      - clone
+
+      - cache_restore:
+          path: ~/.npm
+          key: 'npm-{{ hash "package-lock.json" }}-v1'
+
+      - run: wodby ci init $WODBY_BUILD_ID
+      - run: wodby ci run -s sveltekit -- npm ci
+
+      - cache_save:
+          key: 'npm-{{ hash "package-lock.json" }}-v1'
+          path: ~/.npm
+
+      - run: wodby ci build sveltekit
+      - run: wodby ci push
+      - run: wodby ci deploy

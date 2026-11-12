@@ -1,0 +1,18 @@
+version: 0.1
+
+workflows:
+  main:
+    jobs:
+      - build
+
+jobs:
+  build:
+    steps:
+      - clone
+      - run: wodby ci init $WODBY_BUILD_ID
+      - run: wodby ci run -s rust -- cargo fmt --check
+      - run: wodby ci run -s rust -- cargo clippy --locked --all-targets -- -D warnings
+      - run: wodby ci run -s rust -- cargo test --locked
+      - run: wodby ci build rust -f Dockerfile
+      - run: wodby ci push
+      - run: wodby ci deploy

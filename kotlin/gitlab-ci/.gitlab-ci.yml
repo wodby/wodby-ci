@@ -1,0 +1,19 @@
+image:
+  name: wodby/wodby-cli:2.0
+  pull_policy: always
+
+services:
+  - name: docker:dind
+    alias: docker
+
+stages:
+  - build_and_deploy
+
+prod_deploy:
+  stage: build_and_deploy
+  script:
+    - wodby ci init --dind $WODBY_APP_SERVICE_ID
+    - wodby ci run -s kotlin -- sh ./gradlew --no-daemon --console=plain test
+    - wodby ci build kotlin -f Dockerfile
+    - wodby ci push
+    - wodby ci deploy

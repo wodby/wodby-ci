@@ -1,0 +1,9 @@
+version: 0.1
+
+jobs:
+  spring-boot-health-check:
+    steps:
+      - run: |
+          curl --fail --show-error --silent --retry 10 --retry-all-errors --retry-delay 3 \
+            --retry-connrefused \
+            "http://${WODBY_APP_SERVICE_NAME}:8080/actuator/health"
