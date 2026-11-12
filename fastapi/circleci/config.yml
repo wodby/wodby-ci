@@ -1,0 +1,41 @@
+version: 2.1
+
+orbs:
+  wodby: wodby/setup-wodby-cli@1
+
+jobs:
+  build:
+    machine:
+      image: ubuntu-2604:current
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - uv-v1-{{ checksum "uv.lock" }}
+            - uv-v1-
+
+      - wodby/setup:
+          app-service-id: $WODBY_APP_SERVICE_ID
+
+      - run:
+          name: Check code style
+          command: wodby ci run -s fastapi -- uv run --frozen ruff check .
+
+      - run:
+          name: Check formatting
+          command: wodby ci run -s fastapi -- uv run --frozen ruff format --check .
+
+      - run:
+          name: Run tests
+          command: wodby ci run -s fastapi -- uv run --frozen pytest
+
+      - save_cache:
+          key: uv-v1-{{ checksum "uv.lock" }}
+          paths:
+            - ~/.cache/uv
+
+      - run: wodby ci build fastapi -f Dockerfile
+      - run: wodby ci push
+      - run: wodby ci deploy

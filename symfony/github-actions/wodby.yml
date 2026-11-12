@@ -1,0 +1,38 @@
+name: Wodby Symfony Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: wodby/actions/setup-wodby-cli@v1
+        with:
+          api-key: ${{ secrets.WODBY_API_KEY }}
+          app-service-id: ${{ vars.WODBY_APP_SERVICE_ID }}
+
+      # Development packages stay installed: an environment of type dev runs the same image with APP_ENV=dev.
+      - name: Install dependencies
+        run: wodby ci run -s php -- composer install -n --no-ansi --prefer-dist --optimize-autoloader
+
+      - name: Build PHP image
+        run: wodby ci build php
+
+      - name: Build Nginx image
+        run: wodby ci build nginx
+
+      - name: Push images
+        run: wodby ci push
+
+      - name: Deploy
+        run: wodby ci deploy

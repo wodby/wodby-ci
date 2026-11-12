@@ -1,0 +1,28 @@
+image:
+  name: wodby/wodby-cli:2.0
+  pull_policy: always
+
+services:
+  - name: docker:dind
+    alias: docker
+
+stages:
+  - build_and_deploy
+
+cache:
+  key:
+    files:
+      - uv.lock
+  paths:
+    - .wodby-ci-cache/uv/
+
+prod_deploy:
+  stage: build_and_deploy
+  script:
+    - wodby ci init --dind $WODBY_APP_SERVICE_ID
+    - wodby ci run -s flask -- uv run --frozen ruff check .
+    - wodby ci run -s flask -- uv run --frozen ruff format --check .
+    - wodby ci run -s flask -- uv run --frozen pytest
+    - wodby ci build flask -f Dockerfile
+    - wodby ci push
+    - wodby ci deploy

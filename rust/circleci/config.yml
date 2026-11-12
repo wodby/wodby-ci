@@ -1,0 +1,31 @@
+version: 2.1
+
+orbs:
+  wodby: wodby/setup-wodby-cli@1
+
+jobs:
+  build:
+    machine:
+      image: ubuntu-2604:current
+
+    steps:
+      - checkout
+
+      - wodby/setup:
+          app-service-id: $WODBY_APP_SERVICE_ID
+
+      - run:
+          name: Check formatting
+          command: wodby ci run -s rust -- cargo fmt --check
+
+      - run:
+          name: Run Clippy
+          command: wodby ci run -s rust -- cargo clippy --locked --all-targets -- -D warnings
+
+      - run:
+          name: Run tests
+          command: wodby ci run -s rust -- cargo test --locked
+
+      - run: wodby ci build rust -f Dockerfile
+      - run: wodby ci push
+      - run: wodby ci deploy

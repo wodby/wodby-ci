@@ -13,25 +13,81 @@ import yaml
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 FULL_PROVIDER_EXAMPLES = (
+    "angular",
+    "aspnetcore",
+    "astro",
     "django",
     "drupal",
+    "fastapi",
+    "flask",
     "go",
+    "html",
+    "java",
+    "kotlin",
     "laravel",
     "matomo",
     "nextjs",
     "node",
+    "nuxt",
     "php",
     "python",
     "rails",
+    "react",
+    "ruby",
+    "rust",
+    "spring-boot",
     "static",
+    "strapi",
+    "sveltekit",
+    "symfony",
+    "tanstack-start",
+    "vue",
     "wordpress",
+)
+# Wodby build boilerplates offered by the catalog services. The README must link each
+# of them, so a new boilerplate cannot be added to the catalog without an example here.
+BOILERPLATE_REPOSITORIES = (
+    "wodby/angular-boilerplate",
+    "wodby/aspnetcore-boilerplate",
+    "wodby/astro-boilerplate",
+    "wodby/django-boilerplate",
+    "wodby/drupal-cms-template",
+    "wodby/drupal-vanilla",
+    "wodby/expressjs-boilerplate",
+    "wodby/fastapi-boilerplate",
+    "wodby/flask-boilerplate",
+    "wodby/go-boilerplate",
+    "wodby/html-boilerplate",
+    "wodby/java-boilerplate",
+    "wodby/kotlin-boilerplate",
+    "wodby/laravel-boilerplate",
+    "wodby/matomo-boilerplate",
+    "wodby/nextjs-boilerplate",
+    "wodby/nuxt-boilerplate",
+    "wodby/php-package-boilerplate",
+    "wodby/python-boilerplate",
+    "wodby/rails-boilerplate",
+    "wodby/react-boilerplate",
+    "wodby/ruby-boilerplate",
+    "wodby/rust-boilerplate",
+    "wodby/spring-boot-boilerplate",
+    "wodby/strapi-boilerplate",
+    "wodby/sveltekit-boilerplate",
+    "wodby/symfony-boilerplate",
+    "wodby/tanstack-start-boilerplate",
+    "wodby/vue-boilerplate",
+    "wodby/wordpress-vanilla",
 )
 APPLICATION_STACKS = (
     "HTML",
+    "Angular",
+    "React",
+    "Vue",
     "PHP",
     "Drupal",
     "WordPress",
     "Laravel",
+    "Symfony",
     "Matomo",
     "Python",
     "Django",
@@ -40,11 +96,35 @@ APPLICATION_STACKS = (
     "Ruby",
     "Rails",
     "Go",
+    "Rust",
+    "Java",
+    "Spring Boot",
+    "Kotlin",
+    "ASP.NET Core",
     "Node.js",
     "Next.js",
+    "Nuxt",
+    "SvelteKit",
+    "Astro",
+    "TanStack Start",
+    "Strapi",
     "Dagster",
 )
 EXPECTED_PROVIDER_COMMANDS = {
+    "angular": (
+        "wodby ci run -i wodby/node -- npm ci",
+        "wodby ci run -i wodby/node -- npm test",
+        "wodby ci run -i wodby/node -- npm run build",
+        "wodby ci build angular --from dist/angular-boilerplate/browser",
+    ),
+    "aspnetcore": (
+        "wodby ci run -i wodby/dotnet:10.0-dev -- dotnet test --solution App.slnx",
+        "wodby ci build aspnetcore -f Dockerfile",
+    ),
+    "astro": (
+        "wodby ci run -s astro -- npm ci",
+        "wodby ci build astro",
+    ),
     "django": (
         "wodby ci run -s django -- uv run --frozen pytest",
         "wodby ci build django -f Dockerfile",
@@ -53,19 +133,37 @@ EXPECTED_PROVIDER_COMMANDS = {
         "wodby ci run -s php -- composer install --prefer-dist -n --no-ansi",
         "wodby ci build",
     ),
+    "fastapi": (
+        "wodby ci run -s fastapi -- uv run --frozen ruff check .",
+        "wodby ci run -s fastapi -- uv run --frozen ruff format --check .",
+        "wodby ci run -s fastapi -- uv run --frozen pytest",
+        "wodby ci build fastapi -f Dockerfile",
+    ),
+    "flask": (
+        "wodby ci run -s flask -- uv run --frozen ruff check .",
+        "wodby ci run -s flask -- uv run --frozen ruff format --check .",
+        "wodby ci run -s flask -- uv run --frozen pytest",
+        "wodby ci build flask -f Dockerfile",
+    ),
     "go": (
         "wodby ci run -s go -- go test ./...",
         "wodby ci build go -f Dockerfile",
+    ),
+    "html": ("wodby ci build nginx --from public",),
+    "java": (
+        "wodby ci run -s java -- sh ./mvnw -B -ntp test",
+        "wodby ci build java -f Dockerfile",
+    ),
+    "kotlin": (
+        "wodby ci run -s kotlin -- sh ./gradlew --no-daemon --console=plain test",
+        "wodby ci build kotlin -f Dockerfile",
     ),
     "laravel": (
         "wodby ci run -s php -- composer install --prefer-dist -n --no-ansi",
         "wodby ci build php",
         "wodby ci build nginx",
     ),
-    "matomo": (
-        "wodby ci run -s matomo -- composer install --prefer-dist -n --no-ansi",
-        "wodby ci build",
-    ),
+    "matomo": ("wodby ci build matomo",),
     "nextjs": (
         "wodby ci run -s nextjs -- npm ci",
         "wodby ci build nextjs -f Dockerfile",
@@ -73,6 +171,10 @@ EXPECTED_PROVIDER_COMMANDS = {
     "node": (
         "npm ci",
         "wodby ci build",
+    ),
+    "nuxt": (
+        "wodby ci run -s nuxt -- npm ci",
+        "wodby ci build nuxt",
     ),
     "php": (
         "wodby ci run -- composer install --prefer-dist -n --no-ansi",
@@ -83,10 +185,50 @@ EXPECTED_PROVIDER_COMMANDS = {
         "wodby ci build python -f Dockerfile",
     ),
     "rails": ("wodby ci build rails -f Dockerfile",),
+    "react": (
+        "wodby ci run -i wodby/node -- npm ci",
+        "wodby ci run -i wodby/node -- npm test",
+        "wodby ci run -i wodby/node -- npm run build",
+        "wodby ci build react --from dist",
+    ),
+    "ruby": ("wodby ci build ruby -f Dockerfile",),
+    "rust": (
+        "wodby ci run -s rust -- cargo fmt --check",
+        "wodby ci run -s rust -- cargo clippy --locked --all-targets -- -D warnings",
+        "wodby ci run -s rust -- cargo test --locked",
+        "wodby ci build rust -f Dockerfile",
+    ),
+    "spring-boot": (
+        "wodby ci run -s spring-boot -- sh ./mvnw -B -ntp test",
+        "wodby ci build spring-boot -f Dockerfile",
+    ),
     "static": (
         "wodby ci run -i wodby/node:24 -- npm ci",
         "wodby ci run -i wodby/node:24 -- npm run build",
         "wodby ci build nginx --from dist",
+    ),
+    "strapi": (
+        "wodby ci run -s strapi -- npm ci",
+        "wodby ci build strapi",
+    ),
+    "sveltekit": (
+        "wodby ci run -s sveltekit -- npm ci",
+        "wodby ci build sveltekit",
+    ),
+    "symfony": (
+        "wodby ci run -s php -- composer install -n --no-ansi --prefer-dist --optimize-autoloader",
+        "wodby ci build php",
+        "wodby ci build nginx",
+    ),
+    "tanstack-start": (
+        "wodby ci run -s tanstack-start -- npm ci",
+        "wodby ci build tanstack-start",
+    ),
+    "vue": (
+        "wodby ci run -i wodby/node -- npm ci",
+        "wodby ci run -i wodby/node -- npm test",
+        "wodby ci run -i wodby/node -- npm run build",
+        "wodby ci build vue --from dist",
     ),
     "wordpress": (
         "wodby ci run -s php -- composer install --prefer-dist -n --no-ansi",
@@ -187,15 +329,25 @@ def validate_automatic_cache_examples(errors: list[str]) -> None:
                 )
 
     native_paths = {
+        "angular": "~/.npm",
+        "astro": "~/.npm",
         "django": "~/.cache/uv",
         "drupal": "~/.composer/cache",
+        "fastapi": "~/.cache/uv",
+        "flask": "~/.cache/uv",
         "laravel": "~/.composer/cache",
-        "matomo": "~/.composer/cache",
         "nextjs": "~/.npm",
         "node": "~/.npm",
+        "nuxt": "~/.npm",
         "php": "~/.composer/cache",
         "python": "~/.cache/uv",
+        "react": "~/.npm",
         "static": "~/.npm",
+        "strapi": "~/.npm",
+        "sveltekit": "~/.npm",
+        "symfony": "~/.composer/cache",
+        "tanstack-start": "~/.npm",
+        "vue": "~/.npm",
         "wordpress": "~/.composer/cache",
     }
     for example, expected in native_paths.items():
@@ -205,15 +357,25 @@ def validate_automatic_cache_examples(errors: list[str]) -> None:
                 errors.append(f"{relative(path)}: missing cache path {expected}")
 
     dind_profiles = {
+        "angular": "npm",
+        "astro": "npm",
         "django": "uv",
         "drupal": "composer",
+        "fastapi": "uv",
+        "flask": "uv",
         "laravel": "composer",
-        "matomo": "composer",
         "nextjs": "npm",
         "node": "npm",
+        "nuxt": "npm",
         "php": "composer",
         "python": "uv",
+        "react": "npm",
         "static": "npm",
+        "strapi": "npm",
+        "sveltekit": "npm",
+        "symfony": "composer",
+        "tanstack-start": "npm",
+        "vue": "npm",
         "wordpress": "composer",
     }
     for example, profile in dind_profiles.items():
@@ -252,6 +414,12 @@ def validate_example_coverage(errors: list[str]) -> None:
             if not path.is_file():
                 errors.append(f"{relative(path)}: missing canonical provider example")
 
+    # An example directory that is not listed above would skip the per-example checks.
+    for path in sorted(REPOSITORY_ROOT.glob("*/wodby/pipeline.yml")):
+        example = path.parent.parent.name
+        if example not in FULL_PROVIDER_EXAMPLES:
+            errors.append(f"{relative(path)}: add {example} to FULL_PROVIDER_EXAMPLES")
+
 
 def validate_provider_commands(errors: list[str]) -> None:
     provider_paths = (
@@ -278,6 +446,14 @@ def validate_readme(errors: list[str]) -> None:
     for stack in APPLICATION_STACKS:
         if stack not in text:
             errors.append(f"README.md: application stack coverage is missing {stack}")
+
+    for repository in BOILERPLATE_REPOSITORIES:
+        if f"https://github.com/{repository})" not in text:
+            errors.append(f"README.md: boilerplate coverage is missing {repository}")
+
+    for example in FULL_PROVIDER_EXAMPLES:
+        if f"]({example}/wodby/pipeline.yml)" not in text:
+            errors.append(f"README.md: example table is missing {example}")
 
     for raw_target in MARKDOWN_LINK.findall(text):
         target = raw_target.strip()

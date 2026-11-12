@@ -9,18 +9,10 @@ services:
 stages:
   - build_and_deploy
 
-cache:
-  key:
-    files:
-      - composer.lock
-  paths:
-    - .wodby-ci-cache/composer/
-
 prod_deploy:
   stage: build_and_deploy
   script:
     - wodby ci init --dind $WODBY_APP_SERVICE_ID
-    - wodby ci run -s matomo -- composer install --prefer-dist -n --no-ansi
-    - wodby ci build
+    - wodby ci build matomo
     - wodby ci push
     - wodby ci deploy

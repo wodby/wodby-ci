@@ -1,0 +1,9 @@
+version: 0.1
+
+jobs:
+  astro-health-check:
+    steps:
+      - run: |
+          curl --fail --show-error --silent --retry 5 --retry-all-errors --retry-delay 2 \
+            --retry-connrefused \
+            "http://${WODBY_APP_SERVICE_NAME}:3000/healthz"

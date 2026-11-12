@@ -1,0 +1,11 @@
+version: 0.1
+
+jobs:
+  angular-smoke-test:
+    steps:
+      - run: |
+          base="http://${WODBY_APP_SERVICE_NAME}"
+          curl --fail --show-error --silent --retry 5 --retry-all-errors --retry-delay 2 \
+            --retry-connrefused --output /dev/null "${base}/.healthz"
+          # A client-side route must be answered with the application's index.html.
+          curl --fail --show-error --silent "${base}/about" | grep -q '<app-root>'

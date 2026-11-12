@@ -11,23 +11,9 @@ jobs:
     steps:
       - checkout
 
-      - restore_cache:
-          keys:
-            - composer-v1-{{ checksum "composer.lock" }}
-            - composer-v1-
-
       - wodby/setup:
           app-service-id: $WODBY_APP_SERVICE_ID
 
-      - run:
-          name: Install Composer dependencies
-          command: wodby ci run -s matomo -- composer install --prefer-dist -n --no-ansi
-
-      - save_cache:
-          key: composer-v1-{{ checksum "composer.lock" }}
-          paths:
-            - ~/.composer/cache
-
-      - run: wodby ci build
+      - run: wodby ci build matomo
       - run: wodby ci push
       - run: wodby ci deploy

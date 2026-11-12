@@ -1,0 +1,28 @@
+version: 0.1
+
+workflows:
+  main:
+    jobs:
+      - build
+
+jobs:
+  build:
+    steps:
+      - clone
+
+      - cache_restore:
+          path: ~/.composer/cache
+          key: 'composer-{{ hash "composer.lock" }}-v1'
+
+      - run: wodby ci init $WODBY_BUILD_ID
+      # Development packages stay installed: an environment of type dev runs the same image with APP_ENV=dev.
+      - run: wodby ci run -s php -- composer install -n --no-ansi --prefer-dist --optimize-autoloader
+
+      - cache_save:
+          key: 'composer-{{ hash "composer.lock" }}-v1'
+          path: ~/.composer/cache
+
+      - run: wodby ci build php
+      - run: wodby ci build nginx
+      - run: wodby ci push
+      - run: wodby ci deploy

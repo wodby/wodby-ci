@@ -1,0 +1,40 @@
+name: Wodby Flask Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: wodby/actions/setup-wodby-cli@v1
+        with:
+          api-key: ${{ secrets.WODBY_API_KEY }}
+          app-service-id: ${{ vars.WODBY_APP_SERVICE_ID }}
+
+      - name: Check code style
+        run: wodby ci run -s flask -- uv run --frozen ruff check .
+
+      - name: Check formatting
+        run: wodby ci run -s flask -- uv run --frozen ruff format --check .
+
+      - name: Run tests
+        run: wodby ci run -s flask -- uv run --frozen pytest
+
+      - name: Build image
+        run: wodby ci build flask -f Dockerfile
+
+      - name: Push image
+        run: wodby ci push
+
+      - name: Deploy
+        run: wodby ci deploy

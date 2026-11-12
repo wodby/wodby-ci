@@ -1,0 +1,17 @@
+version: 0.1
+
+workflows:
+  main:
+    jobs:
+      - build
+
+jobs:
+  build:
+    steps:
+      - clone
+      - run: wodby ci init $WODBY_BUILD_ID
+      # The service image has the runtime only; tests run in the matching SDK image.
+      - run: wodby ci run -i wodby/dotnet:10.0-dev -- dotnet test --solution App.slnx
+      - run: wodby ci build aspnetcore -f Dockerfile
+      - run: wodby ci push
+      - run: wodby ci deploy

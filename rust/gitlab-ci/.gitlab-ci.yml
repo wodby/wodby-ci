@@ -1,0 +1,21 @@
+image:
+  name: wodby/wodby-cli:2.0
+  pull_policy: always
+
+services:
+  - name: docker:dind
+    alias: docker
+
+stages:
+  - build_and_deploy
+
+prod_deploy:
+  stage: build_and_deploy
+  script:
+    - wodby ci init --dind $WODBY_APP_SERVICE_ID
+    - wodby ci run -s rust -- cargo fmt --check
+    - wodby ci run -s rust -- cargo clippy --locked --all-targets -- -D warnings
+    - wodby ci run -s rust -- cargo test --locked
+    - wodby ci build rust -f Dockerfile
+    - wodby ci push
+    - wodby ci deploy
